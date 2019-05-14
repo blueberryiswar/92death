@@ -13,10 +13,10 @@ export default class GameScene extends Phaser.Scene {
 	}
 
 	create() {
-		console.log("Test");
 		this.createMap();
 		this.cursors = this.input.keyboard.createCursorKeys();
 		this.createPlayer();
+		this.setUpCamera();
 
 	}
 
@@ -25,16 +25,30 @@ export default class GameScene extends Phaser.Scene {
 	}
 
 	createPlayer() {
-		this.player = new Player(this, 5, 5);
-		this.cameras.main.startFollow(this.player, true, 0.2, 0.2, 5, 5);
+		this.map.findObject('Characters', (obj) => {
+			if(obj.type === 'playerStart') {
+				this.player = new Player(this, obj.x, obj.y);
+			}
+		})
+	}
+
+	setUpCamera() {
+		this.cameras.main.startFollow(this.player, true, 0.2, 0.2);
+		this.cameras.main.setDeadzone(20,20);
+		this.cameras.main.setBounds(0,0, this.map.widthInPixels, this.map.heightInPixels);
+		this.cameras.main.setZoom(4);
 	}
 
 	createMap() {
-		this.map = this.make.tilemap({key: "play"});
-		this.tiles = this.map.addTilesetImage('greenerror');
-		//this.map = this.make.tilemap({key: "testMap"});
-		//this.tiles = this.map.addTilesetImage('green', 'green', 16, 16, 1, 2);
+		//this.map = this.make.tilemap({key: "play"});
+		//this.tiles = this.map.addTilesetImage('greenerror');
+		this.map = this.make.tilemap({key: "greenZone"});
+		this.tiles = this.map.addTilesetImage('greenZone', 'greenZone', 16, 16, 1, 2);
 		console.log(this.map);
-		this.layers.background = this.map.createStaticLayer("Background", this.tiles, 0, 0);
+		this.layers.background = {};
+		this.layers.background.first = this.map.createStaticLayer("Background1", this.tiles, 0, 0);
+		this.layers.background.second = this.map.createStaticLayer("Background2", this.tiles, 0, 0);
+		this.layers.background.third = this.map.createStaticLayer("Background3", this.tiles, 0, 0);
+		this.layers.blocked = this.map.createStaticLayer("Blocked1", this.tiles, 0,0);
 	}
 }
