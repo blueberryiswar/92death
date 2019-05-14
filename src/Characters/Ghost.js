@@ -7,7 +7,7 @@ export default class Ghost extends Phaser.Physics.Arcade.Sprite {
 		this.health = 5;
         this.setAnimations();
 
-        this.moveSpeed = 120;
+        this.moveSpeed = Phaser.Math.Between(15, 25);
         this.targetPadding = {
             x: Phaser.Math.Between(-25, 25),
             y: Phaser.Math.Between(-25, 25)
@@ -60,11 +60,11 @@ export default class Ghost extends Phaser.Physics.Arcade.Sprite {
 
 		// check if the up or down key is pressed
 		if (this.myTarget.x < this.x + this.targetPadding.x) {
-			this.setVelocityX(-120);
+			this.setVelocityX(this.moveSpeed * -1);
             this.direction = 'left';
             this.anims.play("left", true);
 		} else if (this.myTarget.x > this.x + this.targetPadding.x) {
-			this.setVelocityX(120);
+			this.setVelocityX(this.moveSpeed);
             this.direction = 'right';
             this.anims.play("right", true);
 		} else {
@@ -73,11 +73,11 @@ export default class Ghost extends Phaser.Physics.Arcade.Sprite {
         
         // check if the up or down key is pressed
 		if (this.myTarget.y < this.y + this.targetPadding.y) {
-			this.setVelocityY(-120);
+			this.setVelocityY(this.moveSpeed * -1);
             this.direction = 'up';
             this.anims.play("up", true);
 		} else if (this.myTarget.y > this.y + this.targetPadding.x) {
-			this.setVelocityY(120);
+			this.setVelocityY(this.moveSpeed);
             this.direction = 'down';
             this.anims.play("down", true);
 		} else {
