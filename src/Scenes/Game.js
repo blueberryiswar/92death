@@ -18,6 +18,9 @@ export default class GameScene extends Phaser.Scene {
 		this.createPlayer();
 		this.setUpCamera();
 
+		this.physics.add.collider([this.player], 
+			[this.layers.blocked]);
+
 	}
 
 	update() {
@@ -50,5 +53,6 @@ export default class GameScene extends Phaser.Scene {
 		this.layers.background.second = this.map.createStaticLayer("Background2", this.tiles, 0, 0);
 		this.layers.background.third = this.map.createStaticLayer("Background3", this.tiles, 0, 0);
 		this.layers.blocked = this.map.createStaticLayer("Blocked1", this.tiles, 0,0);
+		this.layers.blocked.setCollisionByExclusion([-1]);
 	}
 }
