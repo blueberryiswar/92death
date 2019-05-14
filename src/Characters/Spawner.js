@@ -19,7 +19,7 @@ export default class Spawner extends Phaser.Physics.Arcade.Sprite {
     }
     
     spawnEnemy() {
-        if(this.scene.enemies.children.entries.length < 50) {
+        if(this.scene.enemies.children.entries.length < 500) {
             switch(this.enemy) {
                 case "ghost":
                     this.scene.enemies.createEnemies([{x: this.x, y: this.y}]);

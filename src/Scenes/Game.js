@@ -22,7 +22,7 @@ export default class GameScene extends Phaser.Scene {
 		this.setUpCamera();
 		this.enemies = new Enemies(this.physics.world, this, []);
 		console.log(this.enemies);
-		this.spawner = new Spawner(this, 125, 40, 1500, 50, 'ghost');
+		this.spawner = new Spawner(this, 125, 40, 500, 50, 'ghost');
 		this.physics.add.collider([this.player], 
 			[this.layers.blocked]);
 		this.physics.add.collider([this.enemies, this.player], this.enemies);

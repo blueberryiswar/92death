@@ -29,28 +29,28 @@ export default class Ghost extends Phaser.Physics.Arcade.Sprite {
         this.scene.anims.create({
             key: 'ghostDown',
             frames: this.scene.anims.generateFrameNumbers('ghost', { start: 0, end: 3 }),
-            frameRate: 10,
+            frameRate: 4,
             repeat: -1
         });
 
         this.scene.anims.create({
             key: 'ghostRight',
             frames: this.scene.anims.generateFrameNumbers('ghost', { start: 4, end: 7 }),
-            frameRate: 10,
+            frameRate: 4,
             repeat: -1
         });
 
         this.scene.anims.create({
             key: 'ghostLeft',
             frames: this.scene.anims.generateFrameNumbers('ghost', { start: 8, end: 11 }),
-            frameRate: 10,
+            frameRate: 4,
             repeat: -1
         });
 
         this.scene.anims.create({
             key: 'ghostUp',
             frames: this.scene.anims.generateFrameNumbers('ghost', { start: 12, end: 15 }),
-            frameRate: 10,
+            frameRate: 4,
             repeat: -1
         });
 
