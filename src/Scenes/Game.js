@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import Player from "../Characters/Player";
+import Enemies from "../Groups/Enemies";
 
 
 export default class GameScene extends Phaser.Scene {
@@ -10,6 +11,7 @@ export default class GameScene extends Phaser.Scene {
 
 	init() {
 		this.layers = {};
+		this.enemyPointer = 0;
 	}
 
 	create() {
@@ -17,7 +19,15 @@ export default class GameScene extends Phaser.Scene {
 		this.cursors = this.input.keyboard.createCursorKeys();
 		this.createPlayer();
 		this.setUpCamera();
-
+		this.enemies = new Enemies(this.physics.world, this, [{
+			x: 150,
+			y: 30
+		},
+		{
+			x: 30,
+			y: 250
+		}]);
+		console.log(this.enemies);
 		this.physics.add.collider([this.player], 
 			[this.layers.blocked]);
 
@@ -25,6 +35,13 @@ export default class GameScene extends Phaser.Scene {
 
 	update() {
 		this.player.update(this.cursors);
+		if (this.enemyPointer < this.enemies.children.entries.length) {
+			this.enemies.children.entries[this.enemyPointer].update();
+			this.enemyPointer++;
+		} else {
+			this.enemyPointer = 0;
+		}
+		
 	}
 
 	createPlayer() {

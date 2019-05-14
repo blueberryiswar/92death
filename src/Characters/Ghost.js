@@ -7,6 +7,8 @@ export default class Ghost extends Phaser.Physics.Arcade.Sprite {
 		this.health = 5;
         this.setAnimations();
 
+        this.myTarget = this.scene.player;
+
 		// enable physics
         this.scene.physics.world.enable(this);
         
@@ -49,12 +51,12 @@ export default class Ghost extends Phaser.Physics.Arcade.Sprite {
 
 	update() {
         // check if the up or down key is pressed
-		if (this.myTarget.y > this.y) {
-			this.setVelocityY(-150);
+		if (this.myTarget.y < this.y) {
+			this.setVelocityY(-120);
             this.direction = 'up';
             this.anims.play("up", true);
-		} else if (this.myTarget.y < this.y) {
-			this.setVelocityY(150);
+		} else if (this.myTarget.y > this.y) {
+			this.setVelocityY(120);
             this.direction = 'down';
             this.anims.play("down", true);
 		} else {
@@ -62,12 +64,12 @@ export default class Ghost extends Phaser.Physics.Arcade.Sprite {
 		}
 
 		// check if the up or down key is pressed
-		if (this.myTarget.x > this.x) {
-			this.setVelocityX(-150);
+		if (this.myTarget.x < this.x) {
+			this.setVelocityX(-120);
             this.direction = 'left';
             this.anims.play("left", true);
-		} else if (this.myTarget.x < this.x) {
-			this.setVelocityX(150);
+		} else if (this.myTarget.x > this.x) {
+			this.setVelocityX(120);
             this.direction = 'right';
             this.anims.play("right", true);
 		} else {
