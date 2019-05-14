@@ -10,7 +10,10 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this.setAnimations();
 
 		// enable physics
-		this.scene.physics.world.enable(this);
+        this.scene.physics.world.enable(this);
+        
+        this.body.setSize(10, 10);
+        this.body.setOffset(3, 10);
 		// add our player to the scene
         this.scene.add.existing(this);
 	}
