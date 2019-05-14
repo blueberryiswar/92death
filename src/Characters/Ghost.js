@@ -7,6 +7,13 @@ export default class Ghost extends Phaser.Physics.Arcade.Sprite {
 		this.health = 5;
         this.setAnimations();
 
+        this.moveSpeed = 120;
+        this.targetPadding = {
+            x: Phaser.Math.Between(-25, 25),
+            y: Phaser.Math.Between(-25, 25)
+        };
+
+
         this.myTarget = this.scene.player;
 
 		// enable physics
@@ -50,30 +57,31 @@ export default class Ghost extends Phaser.Physics.Arcade.Sprite {
     }
 
 	update() {
-        // check if the up or down key is pressed
-		if (this.myTarget.y < this.y) {
-			this.setVelocityY(-120);
-            this.direction = 'up';
-            this.anims.play("up", true);
-		} else if (this.myTarget.y > this.y) {
-			this.setVelocityY(120);
-            this.direction = 'down';
-            this.anims.play("down", true);
-		} else {
-			this.setVelocityY(0);
-		}
 
 		// check if the up or down key is pressed
-		if (this.myTarget.x < this.x) {
+		if (this.myTarget.x < this.x + this.targetPadding.x) {
 			this.setVelocityX(-120);
             this.direction = 'left';
             this.anims.play("left", true);
-		} else if (this.myTarget.x > this.x) {
+		} else if (this.myTarget.x > this.x + this.targetPadding.x) {
 			this.setVelocityX(120);
             this.direction = 'right';
             this.anims.play("right", true);
 		} else {
 			this.setVelocityX(0);
+        }
+        
+        // check if the up or down key is pressed
+		if (this.myTarget.y < this.y + this.targetPadding.y) {
+			this.setVelocityY(-120);
+            this.direction = 'up';
+            this.anims.play("up", true);
+		} else if (this.myTarget.y > this.y + this.targetPadding.x) {
+			this.setVelocityY(120);
+            this.direction = 'down';
+            this.anims.play("down", true);
+		} else {
+			this.setVelocityY(0);
 		}
 	}
 
