@@ -18,9 +18,12 @@ export default class Ghost extends Phaser.Physics.Arcade.Sprite {
 
 		// enable physics
         this.scene.physics.world.enable(this);
+
+        this.body.setSize(12,12);
+        this.body.setOffset(1,1);
         
-        this.body.setSize(10, 10);
-        this.body.setOffset(3, 10);
+        //this.body.setSize(10, 10);
+        //this.body.setOffset(3, 10);
 		// add our player to the scene
         this.scene.add.existing(this);
 	}
