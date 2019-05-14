@@ -6,14 +6,14 @@ export default class Enemies extends Phaser.Physics.Arcade.Group {
         super(world, scene);
         this.scene = scene;
 
-        this.createEnemies(scene, spriteArray);
+        this.createEnemies(spriteArray);
     }
 
-    createEnemies(scene, spriteArray) {
+    createEnemies(spriteArray) {
         // add spriteArray enemies to our Group
         spriteArray.forEach(sprite => {
             // create a new enemy
-            const enemy = new Ghost(scene, sprite.x, sprite.y);
+            const enemy = new Ghost(this.scene, sprite.x, sprite.y);
             // add to our group
             this.add(enemy);
             // destroy the sprite

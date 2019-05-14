@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import Player from "../Characters/Player";
 import Enemies from "../Groups/Enemies";
+import Spawner from "../Characters/Spawner";
 
 
 export default class GameScene extends Phaser.Scene {
@@ -19,15 +20,9 @@ export default class GameScene extends Phaser.Scene {
 		this.cursors = this.input.keyboard.createCursorKeys();
 		this.createPlayer();
 		this.setUpCamera();
-		this.enemies = new Enemies(this.physics.world, this, [{
-			x: 150,
-			y: 30
-		},
-		{
-			x: 30,
-			y: 250
-		}]);
+		this.enemies = new Enemies(this.physics.world, this, []);
 		console.log(this.enemies);
+		this.spawner = new Spawner(this, 125, 40, 1500, 50, 'ghost');
 		this.physics.add.collider([this.player], 
 			[this.layers.blocked]);
 		this.physics.add.collider([this.enemies, this.player], this.enemies);
