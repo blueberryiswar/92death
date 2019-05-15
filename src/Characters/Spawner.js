@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from 'constants';
 
 export default class Spawner extends Phaser.Physics.Arcade.Sprite {
 	constructor (scene, x, y, properties) {
@@ -9,6 +10,7 @@ export default class Spawner extends Phaser.Physics.Arcade.Sprite {
         this.enemy = 'ghost';
 		// add our player to the scene
         this.scene.add.existing(this);
+        //this.checkPath();
 
         for(let i=0; i<properties.length; i++) {
             let property = properties[i];
@@ -36,6 +38,21 @@ export default class Spawner extends Phaser.Physics.Arcade.Sprite {
             callback: this.spawnEnemy,
             loop: true
         });
+    }
+
+    checkPath() {
+        
+        this.points = [];
+        for(let i = 0; i < 20; i++) {
+            let objects = this.scene.physics.overlapRect(this.x, this.y - 32 * i, 32, 32);
+            this.points.push({
+                x: this.x,
+                y: this.y - 32 * i, 
+                objects: objects
+            });
+        }
+        
+        console.log(this.points);
     }
     
     spawnEnemy() {

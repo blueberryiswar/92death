@@ -4,7 +4,8 @@ export default class Ghost extends Phaser.Physics.Arcade.Sprite {
 	constructor (scene, x, y) {
 		super(scene, x, y, 'ghost', 0);
 		this.scene = scene;
-		this.health = 5;
+        this.health = 5;
+        this.damage = 1;
         this.setAnimations();
         this.z = 50;
 
@@ -15,7 +16,7 @@ export default class Ghost extends Phaser.Physics.Arcade.Sprite {
         };
 
 
-        this.myTarget = this.scene.player;
+        this.myTarget = this.scene.target;
 
 		// enable physics
         this.scene.physics.world.enable(this);
@@ -112,5 +113,16 @@ export default class Ghost extends Phaser.Physics.Arcade.Sprite {
 				callbackScope: this
 			});
 		}
-	}
+    }
+    
+    doDamage(target) {
+        this.takeDamage(5);
+    }
+
+    takeDamage(damage) {
+        this.health -= damage;
+        if (this.health <= 0) {
+            this.destroy();
+        }
+    }
 }

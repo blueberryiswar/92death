@@ -3,6 +3,7 @@ import Player from "../Characters/Player";
 import Enemies from "../Groups/Enemies";
 import Spawner from "../Characters/Spawner";
 import Spawners from "../Groups/Spawners";
+import Target from "../Characters/Target";
 
 
 export default class GameScene extends Phaser.Scene {
@@ -20,6 +21,7 @@ export default class GameScene extends Phaser.Scene {
 		this.createMap();
 		this.cursors = this.input.keyboard.createCursorKeys();
 		this.createPlayer();
+		this.createTarget();
 		this.setUpCamera();
 		this.enemies = new Enemies(this.physics.world, this, []);
 		console.log(this.enemies);
@@ -28,6 +30,14 @@ export default class GameScene extends Phaser.Scene {
 		this.physics.add.collider([this.player], 
 			[this.layers.blocked]);
 		this.physics.add.collider([this.enemies, this.player], this.enemies);
+		this.physics.add.overlap(this.enemies, this.target, (target, enemy) => {
+			let damage = enemy.damage;
+			enemy.doDamage(target);
+			target.takeDamage(damage);
+			
+			console.log("enemy");
+			console.log(enemy);
+		});
 	}
 
 	update() {
@@ -47,6 +57,14 @@ export default class GameScene extends Phaser.Scene {
 				this.player = new Player(this, obj.x, obj.y);
 			}
 		})
+	}
+
+	createTarget() {
+		this.map.findObject('Characters', (obj) => {
+			if(obj.type === 'target') {
+				this.target = new Target(this, obj.x, obj.y);
+			}
+		});
 	}
 
 	setUpCamera() {
