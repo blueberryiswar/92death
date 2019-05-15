@@ -28,6 +28,8 @@ export default class Spawner extends Phaser.Physics.Arcade.Sprite {
             }
         }
 
+        this.startingLive = this.live;
+
         this.scene.time.addEvent({
             delay: this.delay,
             callbackScope: this,
