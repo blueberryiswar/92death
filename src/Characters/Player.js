@@ -5,8 +5,10 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 		super(scene, x, y, 'player', 0);
 		this.scene = scene;
 		this.health = 5;
-		this.invulnerable = false;
+        this.invulnerable = false;
+        this.moveSpeed = 70;
         this.direction = 'up';
+        this.diagonal = false;
         this.setAnimations();
         this.stunned = true;
         //this.tint = 0xff0000;
@@ -36,7 +38,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
         this.scene.anims.create({
             key: 'idle',
-            frames: this.scene.anims.generateFrameNumbers('player', { start: 11, end: 12 }),
+            frames: this.scene.anims.generateFrameNumbers('player', { start: 12, end: 13 }),
             frameRate: 4,
             repeat: -1
         });
@@ -44,7 +46,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this.scene.anims.create({
             key: 'sideway',
             frames: this.scene.anims.generateFrameNumbers('player', { start: 13, end: 18 }),
-            frameRate: 5,
+            frameRate: 10,
             repeat: -1
         });
 
@@ -65,40 +67,48 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
 	update(cursors) {
-        let buttonpressed = false;
+        this.buttonpressed = false;
+        if (this.stunned) return;
 		// check if the up or down key is pressed
 		if (cursors.up.isDown) {
-			this.setVelocityY(-150);
+			this.setVelocityY(this.moveSpeed * -1);
             this.direction = 'up';
             this.anims.play("up", true);
-            buttonpressed = true;
+            this.diagonal = true;
+            this.buttonpressed = true;
 		} else if (cursors.down.isDown) {
-			this.setVelocityY(150);
+			this.setVelocityY(this.moveSpeed);
             this.direction = 'down';
             this.anims.play("down", true);
-            buttonpressed = true;
+            this.diagonal = true;
+            this.buttonpressed = true;
 		} else {
             this.setVelocityY(0);
+            this.diagonal = false;
 		}
 
 		// check if the up or down key is pressed
 		if (cursors.left.isDown) {
-			this.setVelocityX(-150);
+			this.setVelocityX(this.moveSpeed * -1);
             this.direction = 'left';
+            if (!this.diagonal) {
             this.anims.play("sideway", true);
-            buttonpressed = true;
+            this.buttonpressed = true;
             this.setFlipX(true);
+            }
 		} else if (cursors.right.isDown) {
-			this.setVelocityX(150);
+			this.setVelocityX(this.moveSpeed);
             this.direction = 'right';
+            if (!this.diagonal) {
             this.anims.play("sideway", true);
-            this.setFlipX(false);
-            buttonpressed = true;
+            this.setFlipX(false);}
+            this.buttonpressed = true;
 		} else {
 			this.setVelocityX(0);
         }
-        if (buttonpressed) {
-            this.anims.play('idle');
+        if (this.buttonpressed) {
+            //this.anims.play('idle', true);
+            this.buttonpressed = false;
         }
 	}
 
