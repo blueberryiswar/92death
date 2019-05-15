@@ -95,9 +95,76 @@
          "visible":true,
          "x":0,
          "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":9,
+         "name":"Spawners",
+         "objects":[
+                {
+                 "height":0,
+                 "id":2,
+                 "name":"Spawner",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"delay",
+                         "type":"int",
+                         "value":1200
+                        }, 
+                        {
+                         "name":"enemy",
+                         "type":"string",
+                         "value":"ghost"
+                        }, 
+                        {
+                         "name":"live",
+                         "type":"int",
+                         "value":8
+                        }],
+                 "rotation":0,
+                 "type":"Spawner",
+                 "visible":true,
+                 "width":0,
+                 "x":74,
+                 "y":179
+                }, 
+                {
+                 "height":0,
+                 "id":4,
+                 "name":"Spawner",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"delay",
+                         "type":"int",
+                         "value":1600
+                        }, 
+                        {
+                         "name":"enemy",
+                         "type":"string",
+                         "value":"ghost"
+                        }, 
+                        {
+                         "name":"live",
+                         "type":"int",
+                         "value":5
+                        }],
+                 "rotation":0,
+                 "type":"Spawner",
+                 "visible":true,
+                 "width":0,
+                 "x":303,
+                 "y":207
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
         }],
- "nextlayerid":9,
- "nextobjectid":2,
+ "nextlayerid":10,
+ "nextobjectid":5,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.2.3",

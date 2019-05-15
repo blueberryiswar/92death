@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.3" orientation="orthogonal" renderorder="right-down" width="26" height="36" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="2">
+<map version="1.2" tiledversion="1.2.3" orientation="orthogonal" renderorder="right-down" width="26" height="36" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="5">
  <tileset firstgid="1" name="greenZone" tilewidth="16" tileheight="16" spacing="2" margin="1" tilecount="12" columns="6">
   <image source="greenZone.png" width="108" height="36"/>
  </tileset>
@@ -245,6 +245,24 @@
  </layer>
  <objectgroup id="8" name="Characters">
   <object id="1" name="playerStart" type="playerStart" x="170" y="361">
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="9" name="Spawners">
+  <object id="2" name="Spawner" type="Spawner" x="74" y="179">
+   <properties>
+    <property name="delay" type="int" value="1200"/>
+    <property name="enemy" value="ghost"/>
+    <property name="live" type="int" value="8"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="4" name="Spawner" type="Spawner" x="303" y="207">
+   <properties>
+    <property name="delay" type="int" value="1600"/>
+    <property name="enemy" value="ghost"/>
+    <property name="live" type="int" value="5"/>
+   </properties>
    <point/>
   </object>
  </objectgroup>

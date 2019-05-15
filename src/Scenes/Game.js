@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import Player from "../Characters/Player";
 import Enemies from "../Groups/Enemies";
 import Spawner from "../Characters/Spawner";
+import Spawners from "../Groups/Spawners";
 
 
 export default class GameScene extends Phaser.Scene {
@@ -22,7 +23,8 @@ export default class GameScene extends Phaser.Scene {
 		this.setUpCamera();
 		this.enemies = new Enemies(this.physics.world, this, []);
 		console.log(this.enemies);
-		this.spawner = new Spawner(this, 125, 40, 500, 50, 'ghost');
+		//this.spawner = new Spawner(this, 125, 40, 500, 50, 'ghost');
+		this.createSpawners();
 		this.physics.add.collider([this.player], 
 			[this.layers.blocked]);
 		this.physics.add.collider([this.enemies, this.player], this.enemies);
@@ -67,5 +69,15 @@ export default class GameScene extends Phaser.Scene {
 		this.layers.background.third = this.map.createStaticLayer("Background3", this.tiles, 0, 0);
 		this.layers.blocked = this.map.createStaticLayer("Blocked1", this.tiles, 0,0);
 		this.layers.blocked.setCollisionByExclusion([-1]);
+	}
+
+	createSpawners() {
+		for(let i=0; i < this.map.objects.length; i++) {
+			if(this.map.objects[i].name === "Spawners") {
+				this.spawners = this.map.objects[i];
+				break;
+			}
+		}
+		this.spawnerGroup = new Spawners(this.physics.world, this, this.spawners);
 	}
 }
