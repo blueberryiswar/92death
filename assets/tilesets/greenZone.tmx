@@ -254,16 +254,16 @@
  <objectgroup id="9" name="Spawners">
   <object id="2" name="Spawner" type="Spawner" x="74" y="179">
    <properties>
-    <property name="delay" type="int" value="1200"/>
-    <property name="enemy" value="ghost"/>
-    <property name="live" type="int" value="8"/>
+    <property name="delay" type="int" value="3000"/>
+    <property name="enemy" value="irrlicht"/>
+    <property name="live" type="int" value="10"/>
    </properties>
    <point/>
   </object>
   <object id="4" name="Spawner" type="Spawner" x="303" y="207">
    <properties>
-    <property name="delay" type="int" value="1600"/>
-    <property name="enemy" value="ghost"/>
+    <property name="delay" type="int" value="2600"/>
+    <property name="enemy" value="irrlicht"/>
     <property name="live" type="int" value="5"/>
    </properties>
    <point/>

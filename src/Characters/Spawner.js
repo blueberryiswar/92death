@@ -1,5 +1,4 @@
 import Phaser from 'phaser';
-import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from 'constants';
 
 export default class Spawner extends Phaser.Physics.Arcade.Sprite {
 	constructor (scene, x, y, properties) {
@@ -7,7 +6,7 @@ export default class Spawner extends Phaser.Physics.Arcade.Sprite {
 		this.scene = scene;
         this.delay = 1500;
         this.live = 10;
-        this.enemy = 'ghost';
+        this.enemy = 'irrlicht';
 		// add our player to the scene
         this.scene.add.existing(this);
         //this.checkPath();
@@ -57,9 +56,17 @@ export default class Spawner extends Phaser.Physics.Arcade.Sprite {
     
     spawnEnemy() {
         if(this.scene.enemies.children.entries.length < 500 && this.live > 0) {
+            console.log(this.enemy);
             switch(this.enemy) {
+                case "Ghost":
                 case "ghost":
-                    this.scene.enemies.createEnemies([{x: this.x, y: this.y}]);
+                    this.scene.enemies.createEnemies([{type: 'ghost', x: this.x, y: this.y}]);
+                    this.live--;
+                    break;
+                case "Irrlicht":
+                case "irrlicht":
+                    console.log("irrlicht go");
+                    this.scene.enemies.createEnemies([{type: 'irrlicht', x: this.x, y: this.y}]);
                     this.live--;
                     break;
                 default:

@@ -122,17 +122,17 @@
                         {
                          "name":"delay",
                          "type":"int",
-                         "value":1200
+                         "value":3000
                         }, 
                         {
                          "name":"enemy",
                          "type":"string",
-                         "value":"ghost"
+                         "value":"irrlicht"
                         }, 
                         {
                          "name":"live",
                          "type":"int",
-                         "value":8
+                         "value":10
                         }],
                  "rotation":0,
                  "type":"Spawner",
@@ -150,12 +150,12 @@
                         {
                          "name":"delay",
                          "type":"int",
-                         "value":1600
+                         "value":2600
                         }, 
                         {
                          "name":"enemy",
                          "type":"string",
-                         "value":"ghost"
+                         "value":"irrlicht"
                         }, 
                         {
                          "name":"live",

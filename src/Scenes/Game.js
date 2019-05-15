@@ -1,7 +1,6 @@
 import Phaser from "phaser";
 import Player from "../Characters/Player";
 import Enemies from "../Groups/Enemies";
-import Spawner from "../Characters/Spawner";
 import Spawners from "../Groups/Spawners";
 import Target from "../Characters/Target";
 
@@ -32,11 +31,11 @@ export default class GameScene extends Phaser.Scene {
 		this.physics.add.collider([this.enemies, this.player], this.enemies);
 		this.physics.add.overlap(this.enemies, this.target, (target, enemy) => {
 			let damage = enemy.damage;
-			enemy.doDamage(target);
-			target.takeDamage(damage);
-			
-			console.log("enemy");
-			console.log(enemy);
+			if (!target.portalOpen) {
+				enemy.doDamage(target);
+			} else {
+				enemy.enterGate();
+			}
 		});
 	}
 

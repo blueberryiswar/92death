@@ -1,18 +1,18 @@
 import Phaser from 'phaser';
 
-export default class Ghost extends Phaser.Physics.Arcade.Sprite {
+export default class Irrlicht extends Phaser.Physics.Arcade.Sprite {
 	constructor (scene, x, y) {
-		super(scene, x, y, 'ghost', 0);
+		super(scene, x, y, 'irrlicht', 0);
 		this.scene = scene;
-        this.health = 5;
+        this.health = 3;
         this.damage = 1;
         this.setAnimations();
         this.z = 50;
-
-        this.moveSpeed = Phaser.Math.Between(15, 25);
+        console.log("irrlicht baby");
+        this.moveSpeed = 10;
         this.targetPadding = {
-            x: Phaser.Math.Between(-25, 25),
-            y: Phaser.Math.Between(-25, 25)
+            x: Phaser.Math.Between(-15, 15),
+            y: Phaser.Math.Between(-15, 15)
         };
 
 
@@ -22,7 +22,7 @@ export default class Ghost extends Phaser.Physics.Arcade.Sprite {
         this.scene.physics.world.enable(this);
 
         this.body.setSize(12,12);
-        this.body.setOffset(1,1);
+        this.body.setOffset(4,2);
         
         //this.body.setSize(10, 10);
         //this.body.setOffset(3, 10);
@@ -32,33 +32,19 @@ export default class Ghost extends Phaser.Physics.Arcade.Sprite {
 
     setAnimations() {
         this.scene.anims.create({
-            key: 'ghostDown',
-            frames: this.scene.anims.generateFrameNumbers('ghost', { start: 0, end: 3 }),
+            key: 'irrlichtMove',
+            frames: this.scene.anims.generateFrameNumbers('irrlicht', { start: 0, end: 2 }),
             frameRate: 4,
             repeat: -1
         });
 
         this.scene.anims.create({
-            key: 'ghostRight',
-            frames: this.scene.anims.generateFrameNumbers('ghost', { start: 4, end: 7 }),
-            frameRate: 4,
-            repeat: -1
+            key: 'irrlichtExplode',
+            frames: this.scene.anims.generateFrameNumbers('irrlicht', { start: 3, end: 8 }),
+            frameRate: 5,
+            repeat: 0
         });
-
-        this.scene.anims.create({
-            key: 'ghostLeft',
-            frames: this.scene.anims.generateFrameNumbers('ghost', { start: 8, end: 11 }),
-            frameRate: 4,
-            repeat: -1
-        });
-
-        this.scene.anims.create({
-            key: 'ghostUp',
-            frames: this.scene.anims.generateFrameNumbers('ghost', { start: 12, end: 15 }),
-            frameRate: 4,
-            repeat: -1
-        });
-
+        this.anims.play("irrlichtMove", true);
     }
 
 	update() {
@@ -67,11 +53,10 @@ export default class Ghost extends Phaser.Physics.Arcade.Sprite {
 		if (this.myTarget.x < this.x + this.targetPadding.x) {
 			this.setVelocityX(this.moveSpeed * -1);
             this.direction = '';
-            this.anims.play("ghostLeft", true);
 		} else if (this.myTarget.x > this.x + this.targetPadding.x) {
 			this.setVelocityX(this.moveSpeed);
             this.direction = 'ghostRight';
-            this.anims.play("ghostLeft", true);
+            
 		} else {
 			this.setVelocityX(0);
         }
@@ -80,11 +65,9 @@ export default class Ghost extends Phaser.Physics.Arcade.Sprite {
 		if (this.myTarget.y < this.y + this.targetPadding.y) {
 			this.setVelocityY(this.moveSpeed * -1);
             this.direction = 'up';
-            this.anims.play("ghostUp", true);
 		} else if (this.myTarget.y > this.y + this.targetPadding.x) {
 			this.setVelocityY(this.moveSpeed);
             this.direction = 'down';
-            this.anims.play("ghostDown", true);
 		} else {
 			this.setVelocityY(0);
         }
@@ -116,7 +99,9 @@ export default class Ghost extends Phaser.Physics.Arcade.Sprite {
     }
     
     doDamage(target) {
+        if (this.health <= 0) return;
         this.takeDamage(5);
+        target.takeDamage(this.damage);
     }
 
     enterGate() {
@@ -126,7 +111,17 @@ export default class Ghost extends Phaser.Physics.Arcade.Sprite {
     takeDamage(damage) {
         this.health -= damage;
         if (this.health <= 0) {
-            this.destroy();
+            this.explode();
         }
+    }
+
+    explode() {
+        this.anims.play('irrlichtExplode', true);
+        this.scene.time.addEvent({
+            delay: 1250,
+            callbackScope: this,
+            callback: this.destroy,
+            loop: false
+        });
     }
 }

@@ -6,6 +6,7 @@ export default class Target extends Phaser.Physics.Arcade.Sprite {
 
 		this.scene = scene;
         this.live = 5;
+        this.portalOpen = false;
 
         // enable physics
         this.scene.physics.world.enable(this);
@@ -36,7 +37,7 @@ export default class Target extends Phaser.Physics.Arcade.Sprite {
             console.log(this.scene.cameras.main);
             this.scene.cameras.main.stopFollow();
             this.scene.cameras.main.pan(this.x, this.y, 1000, 'Elastic');
-            this.destroy();
+            this.portalOpen = true;
         }
     }
 }

@@ -16,6 +16,10 @@ export default class PreloadScene extends Phaser.Scene {
             frameWidth: 32,
             frameHeight: 32
         });
+        this.load.spritesheet('irrlicht', 'assets/characters/irrlicht.png', {
+            frameWidth: 16,
+            frameHeight: 16
+        });
 
         this.load.image('logo2', 'assets/logo.png');
     }
