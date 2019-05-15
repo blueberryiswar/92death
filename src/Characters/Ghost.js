@@ -6,6 +6,7 @@ export default class Ghost extends Phaser.Physics.Arcade.Sprite {
 		this.scene = scene;
 		this.health = 5;
         this.setAnimations();
+        this.z = 50;
 
         this.moveSpeed = Phaser.Math.Between(15, 25);
         this.targetPadding = {
@@ -85,7 +86,8 @@ export default class Ghost extends Phaser.Physics.Arcade.Sprite {
             this.anims.play("ghostDown", true);
 		} else {
 			this.setVelocityY(0);
-		}
+        }
+        this.z=this.y;
 	}
 
 	loseHealth () {

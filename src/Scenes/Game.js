@@ -28,7 +28,6 @@ export default class GameScene extends Phaser.Scene {
 		this.physics.add.collider([this.player], 
 			[this.layers.blocked]);
 		this.physics.add.collider([this.enemies, this.player], this.enemies);
-
 	}
 
 	update() {

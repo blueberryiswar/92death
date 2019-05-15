@@ -16,8 +16,9 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 		// enable physics
         this.scene.physics.world.enable(this);
         
-        //this.body.setSize(10, 10);
-        //this.body.setOffset(3, 10);
+        this.body.setSize(16, 20);
+        this.body.setOffset(8, 12);
+        this.z = 40;
 		// add our player to the scene
         this.scene.add.existing(this);
         this.scene.time.addEvent({
@@ -110,6 +111,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
             //this.anims.play('idle', true);
             this.buttonpressed = false;
         }
+        this.z = this.y;
 	}
 
 	loseHealth () {
@@ -138,6 +140,15 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     
     appear() {
         this.anims.play('appear', true);
+        this.scene.time.addEvent({
+            delay: 1400,
+            callbackScope: this,
+            callback: this.unstun,
+            loop: false
+        });
+    }
+
+    unstun() {
         this.stunned = false;
     }
 }
