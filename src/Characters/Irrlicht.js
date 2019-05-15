@@ -49,6 +49,8 @@ export default class Irrlicht extends Phaser.Physics.Arcade.Sprite {
 
 	update() {
 
+        if(this.health <= 0) return;
+
 		// check if the up or down key is pressed
 		if (this.myTarget.x < this.x + this.targetPadding.x) {
 			this.setVelocityX(this.moveSpeed * -1);

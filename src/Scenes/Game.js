@@ -35,8 +35,13 @@ export default class GameScene extends Phaser.Scene {
 				enemy.doDamage(target);
 			} else {
 				enemy.enterGate();
+				this.gameOver();
 			}
 		});
+	}
+
+	gameOver() {
+		this.scene.restart();
 	}
 
 	update() {
