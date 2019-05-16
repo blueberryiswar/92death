@@ -5,7 +5,6 @@ export default class Spawners extends Phaser.Physics.Arcade.StaticGroup {
     constructor(world, scene, spriteArray) {
         super(world, scene);
         this.scene = scene;
-        console.log(spriteArray);
         this.createSpawners(spriteArray);
     }
 

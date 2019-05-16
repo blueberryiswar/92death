@@ -8,6 +8,7 @@ export default class Ghost extends Phaser.Physics.Arcade.Sprite {
         this.damage = 1;
         this.setAnimations();
         this.z = 50;
+        this.towerTarget = true;
 
         this.moveSpeed = Phaser.Math.Between(15, 25);
         this.targetPadding = {

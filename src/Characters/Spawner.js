@@ -56,7 +56,6 @@ export default class Spawner extends Phaser.Physics.Arcade.Sprite {
     
     spawnEnemy() {
         if(this.scene.enemies.children.entries.length < 500 && this.live > 0) {
-            console.log(this.enemy);
             switch(this.enemy) {
                 case "Ghost":
                 case "ghost":
@@ -65,7 +64,7 @@ export default class Spawner extends Phaser.Physics.Arcade.Sprite {
                     break;
                 case "Irrlicht":
                 case "irrlicht":
-                    console.log("irrlicht go");
+                    
                     this.scene.enemies.createEnemies([{type: 'irrlicht', x: this.x, y: this.y}]);
                     this.live--;
                     break;

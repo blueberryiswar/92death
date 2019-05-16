@@ -3,6 +3,7 @@ import Player from "../Characters/Player";
 import Enemies from "../Groups/Enemies";
 import Spawners from "../Groups/Spawners";
 import Target from "../Characters/Target";
+import Towers from "../Groups/Towers";
 
 
 export default class GameScene extends Phaser.Scene {
@@ -23,9 +24,9 @@ export default class GameScene extends Phaser.Scene {
 		this.createTarget();
 		this.setUpCamera();
 		this.enemies = new Enemies(this.physics.world, this, []);
-		console.log(this.enemies);
 		//this.spawner = new Spawner(this, 125, 40, 500, 50, 'ghost');
 		this.createSpawners();
+		this.createTowerGroup();
 		this.physics.add.collider([this.player], 
 			[this.layers.blocked]);
 		this.physics.add.collider([this.enemies, this.player], this.enemies);
@@ -44,7 +45,7 @@ export default class GameScene extends Phaser.Scene {
 		this.scene.restart();
 	}
 
-	update() {
+	update(time, delta) {
 		this.player.update(this.cursors);
 		if (this.enemyPointer < this.enemies.children.entries.length) {
 			this.enemies.children.entries[this.enemyPointer].update();
@@ -52,6 +53,9 @@ export default class GameScene extends Phaser.Scene {
 		} else {
 			this.enemyPointer = 0;
 		}
+		this.towerGroup.children.entries.forEach(
+			(child) => { child.update(time, delta); }
+		)
 		
 	}
 
@@ -83,7 +87,6 @@ export default class GameScene extends Phaser.Scene {
 		//this.tiles = this.map.addTilesetImage('greenerror');
 		this.map = this.make.tilemap({key: "greenZone"});
 		this.tiles = this.map.addTilesetImage('greenZone', 'greenZone', 16, 16, 1, 2);
-		console.log(this.map);
 		this.layers.background = {};
 		this.layers.background.first = this.map.createStaticLayer("Background1", this.tiles, 0, 0);
 		this.layers.background.second = this.map.createStaticLayer("Background2", this.tiles, 0, 0);
@@ -100,5 +103,9 @@ export default class GameScene extends Phaser.Scene {
 			}
 		}
 		this.spawnerGroup = new Spawners(this.physics.world, this, this.spawners);
+	}
+
+	createTowerGroup() {
+		this.towerGroup = new Towers(this.physics.world, this);
 	}
 }

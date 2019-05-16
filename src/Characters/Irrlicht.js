@@ -8,7 +8,7 @@ export default class Irrlicht extends Phaser.Physics.Arcade.Sprite {
         this.damage = 1;
         this.setAnimations();
         this.z = 50;
-        console.log("irrlicht baby");
+        this.towerTarget = true;
         this.moveSpeed = 10;
         this.targetPadding = {
             x: Phaser.Math.Between(-15, 15),
@@ -48,6 +48,7 @@ export default class Irrlicht extends Phaser.Physics.Arcade.Sprite {
     }
 
 	update() {
+        this.setVelocity(0);
 
         if(this.health <= 0) return;
 
@@ -102,7 +103,7 @@ export default class Irrlicht extends Phaser.Physics.Arcade.Sprite {
     
     doDamage(target) {
         if (this.health <= 0) return;
-        this.takeDamage(5);
+        this.takeDamage(this.health);
         target.takeDamage(this.damage);
     }
 

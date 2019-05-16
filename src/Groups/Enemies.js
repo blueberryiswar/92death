@@ -24,7 +24,6 @@ export default class Enemies extends Phaser.Physics.Arcade.Group {
 
     getNewEnemy(type, x, y) {
         let enemy = undefined;
-        console.log(type);
         switch(type) {
             case "ghost":
             enemy = new Ghost(this.scene, x, y);
