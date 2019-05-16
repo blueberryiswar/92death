@@ -12,7 +12,7 @@ export default class FireBomb extends Bullet {
             key: 'fireBomb',
             frames: this.scene.anims.generateFrameNumbers('fireBomb', { start: 0, end: 3 }),
             frameRate: 6,
-            repeat: 0
+            repeat: -1
         });
         this.anims.play('fireBomb');
     }
