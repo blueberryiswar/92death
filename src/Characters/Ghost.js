@@ -64,6 +64,21 @@ export default class Ghost extends Phaser.Physics.Arcade.Sprite {
 
 	update() {
 
+        if(this.body.touching.down)  {
+            console.log("aua");
+            if(!this.body.touching.left && !this.blockedLeft) {
+                this.setVelocityX(this.moveSpeed * -1);
+            } else if (!this.body.touching.right) {
+                this.setVelocityX(this.moveSpeed * 1);
+                this.blockedLeft = false;
+            } else {
+                this.setVelocityX(this.moveSpeed * 2);
+            }
+            return;
+        }
+
+        this.blockedLeft = false;
+
 		// check if the up or down key is pressed
 		if (this.myTarget.x < this.x + this.targetPadding.x) {
 			this.setVelocityX(this.moveSpeed * -1);

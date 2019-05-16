@@ -34,8 +34,10 @@ export default class GameScene extends Phaser.Scene {
 		this.setUpCamera();
 		this.enemies = new Enemies(this.physics.world, this, []);
 		//this.spawner = new Spawner(this, 125, 40, 500, 50, 'ghost');
+		this.getPath();
 		this.createSpawners();
 		this.createTowerGroup();
+		
 
 		this.physics.add.collider([this.player, this.towerGroup], 
 			[this.layers.blocked.first, this.layers.blocked.second]);
@@ -158,5 +160,16 @@ export default class GameScene extends Phaser.Scene {
 
 	createTowerGroup() {
 		this.towerGroup = new Towers(this.physics.world, this);
+	}
+
+	getPath() {
+		// find paths layer
+		for(let i=0; i < this.map.objects.length; i++) {
+			if(this.map.objects[i].name === "Paths") {
+				this.paths = this.map.objects[i];
+				break;
+			}
+		}
+		console.log(this.paths);
 	}
 }
