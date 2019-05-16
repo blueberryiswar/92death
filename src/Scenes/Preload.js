@@ -28,6 +28,7 @@ export default class PreloadScene extends Phaser.Scene {
             frameWidth: 17,
             frameHeight: 18
         });
+        this.load.image('aoe', 'assets/gui/aoe.png');
 
         this.load.image('logo2', 'assets/logo.png');
     }

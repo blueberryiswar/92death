@@ -17,4 +17,20 @@ export default class FireBomb extends Bullet {
         this.anims.play('fireBomb');
     }
 
+    fireAt(position,target) {
+        this.enableBody(true);
+        this.active = true;
+        this.lifetime = this.defaultLifetime;
+        this.visible = true;
+        this.setPosition(position.x, position.y);
+        this.rotation = this.scene.physics
+                .accelerateToObject(this, target, this.speed);
+        this.anims.play('fireBomb');
+        this.scene.add.sprite({
+            key: 'aoe',
+            x: target.x,
+            y: target.y
+        }, true);
+    }
+
 }

@@ -37,7 +37,6 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
         this.lifetime = this.defaultLifetime;
         this.visible = true;
         this.setPosition(position.x, position.y);
-        this.anims.play('fireBomb');
         this.rotation = this.scene.physics
                 .accelerateToObject(this, target, this.speed);
     }

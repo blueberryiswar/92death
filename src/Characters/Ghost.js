@@ -127,6 +127,7 @@ export default class Ghost extends Phaser.Physics.Arcade.Sprite {
     takeDamage(damage) {
         this.health -= damage;
         if (this.health <= 0) {
+            this.scene.enemyDeath();
             this.destroy();
         }
     }

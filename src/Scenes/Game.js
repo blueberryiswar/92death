@@ -15,6 +15,9 @@ export default class GameScene extends Phaser.Scene {
 	init() {
 		this.layers = {};
 		this.enemyPointer = 0;
+		this.wave = 1;
+		this.waves = 5;
+		this.toDefeat = 0;
 	}
 
 	create() {
@@ -104,6 +107,33 @@ export default class GameScene extends Phaser.Scene {
 			}
 		}
 		this.spawnerGroup = new Spawners(this.physics.world, this, this.spawners);
+
+		this.spawnerGroup.children.entries.forEach((spawny) => {
+			this.toDefeat += spawny.startingLive;
+		});
+	}
+
+	enemyDeath() {
+		this.toDefeat -= 1;
+		if(this.toDefeat <= 0) {
+			this.playerDone();
+		}
+	}
+
+	playerDone() {
+		if(this.wave < this.waves) {
+			this.advanceWave();
+		} else {
+			this.gameOver();
+		}
+	}
+
+	advanceWave() {
+		this.spawnerGroup.children.entries.forEach((spawny) =>{
+			this.toDefeat += spawny.startingLive;
+			spawny.live = spawny.startingLive + spawny.increment;
+		});
+		this.wave++;
 	}
 
 	createTowerGroup() {

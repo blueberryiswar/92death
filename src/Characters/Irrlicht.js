@@ -120,6 +120,7 @@ export default class Irrlicht extends Phaser.Physics.Arcade.Sprite {
 
     explode() {
         this.anims.play('irrlichtExplode', true);
+        this.scene.enemyDeath();
         this.scene.time.addEvent({
             delay: 1250,
             callbackScope: this,

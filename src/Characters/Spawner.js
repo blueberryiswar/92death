@@ -7,6 +7,7 @@ export default class Spawner extends Phaser.Physics.Arcade.Sprite {
         this.delay = 1500;
         this.live = 10;
         this.enemy = 'irrlicht';
+        this.increment = 5;
 		// add our player to the scene
         this.scene.add.existing(this);
         //this.checkPath();
