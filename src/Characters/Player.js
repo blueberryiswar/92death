@@ -38,8 +38,22 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         });
 
         this.scene.anims.create({
-            key: 'idle',
-            frames: this.scene.anims.generateFrameNumbers('player', { start: 12, end: 13 }),
+            key: 'idleside',
+            frames: this.scene.anims.generateFrameNumbers('player', { start: 12, end: 12 }),
+            frameRate: 4,
+            repeat: -1
+        });
+
+        this.scene.anims.create({
+            key: 'idledown',
+            frames: this.scene.anims.generateFrameNumbers('player', { start: 19, end: 19 }),
+            frameRate: 4,
+            repeat: -1
+        });
+
+        this.scene.anims.create({
+            key: 'idleup',
+            frames: this.scene.anims.generateFrameNumbers('player', { start: 23, end: 23 }),
             frameRate: 4,
             repeat: -1
         });
@@ -54,13 +68,13 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this.scene.anims.create({
             key: 'down',
             frames: this.scene.anims.generateFrameNumbers('player', { start: 19, end: 22 }),
-            frameRate: 5,
+            frameRate: 8,
             repeat: -1
         });
 
         this.scene.anims.create({
             key: 'up',
-            frames: this.scene.anims.generateFrameNumbers('player', { start: 23, end: 23 }),
+            frames: this.scene.anims.generateFrameNumbers('player', { start: 23, end: 26 }),
             frameRate: 5,
             repeat: -1
         });
@@ -77,12 +91,15 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
             this.anims.play("up", true);
             this.diagonal = true;
             this.buttonpressed = true;
+            this.lastUp = true;
+            this.lastY = true;
 		} else if (cursors.down.isDown) {
 			this.setVelocityY(this.moveSpeed);
             this.direction = 'down';
             this.anims.play("down", true);
             this.diagonal = true;
-            this.buttonpressed = true;
+            this.lastUp = false;
+            this.lastY = true;
 		} else {
             this.setVelocityY(0);
             this.diagonal = false;
@@ -96,6 +113,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
             this.anims.play("sideway", true);
             this.buttonpressed = true;
             this.setFlipX(true);
+            this.lastY = false;
             }
 		} else if (cursors.right.isDown) {
 			this.setVelocityX(this.moveSpeed);
@@ -104,8 +122,19 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
             this.anims.play("sideway", true);
             this.setFlipX(false);}
             this.buttonpressed = true;
+            this.lastY = false;
 		} else {
-			this.setVelocityX(0);
+            this.setVelocityX(0);
+            if (!this.diagonal) {
+                this.play('idleside');
+                if(this.lastY) {
+                    if(this.lastUp) {
+                        this.play('idleup');
+                    } else {
+                        this.play('idledown');
+                    }
+                }
+            }
         }
         if (this.buttonpressed) {
             //this.anims.play('idle', true);

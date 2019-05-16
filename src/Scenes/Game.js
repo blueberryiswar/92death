@@ -39,6 +39,7 @@ export default class GameScene extends Phaser.Scene {
 				this.gameOver();
 			}
 		});
+		
 	}
 
 	gameOver() {

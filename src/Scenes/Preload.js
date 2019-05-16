@@ -20,6 +20,14 @@ export default class PreloadScene extends Phaser.Scene {
             frameWidth: 16,
             frameHeight: 16
         });
+        this.load.spritesheet('fireTower', 'assets/towers/fireTower.png', {
+            frameHeight: 64,
+            frameWidth: 64
+        });
+        this.load.spritesheet('fireBomb', 'assets/bullets/fireBullet.png', {
+            frameWidth: 17,
+            frameHeight: 18
+        });
 
         this.load.image('logo2', 'assets/logo.png');
     }
