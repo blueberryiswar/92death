@@ -1,11 +1,12 @@
 import Phaser from 'phaser';
 import Bullets from '../Groups/Bullets';
+import { deflateRaw } from 'zlib';
 
 export default class FireTower extends Phaser.Physics.Arcade.Sprite {
 	constructor (scene, x, y) {
         super(scene, x, y, 'fireTower', 0);
 
-		this.scene = scene;
+        this.scene = scene;
         this.damage = 5;
         this.rangeX = 200;
         this.rangeY = 200;
@@ -13,12 +14,14 @@ export default class FireTower extends Phaser.Physics.Arcade.Sprite {
         this.reloadTime = 2400;
         this.reloadCurrent = 2000;
         this.bullets = new Bullets(this.scene.physics.world, this.scene, 'fireBomb', {x: this.x, y: this.y - 26}, 5);
-        console.log(this.scene);
+        console.log(this);
         this.setAnimations();
 
         // enable physics
         this.scene.physics.world.enable(this);
-
+        this.setSize(36, 24);
+        this.setOffset(14, 40);
+        this.reduceVelocity = 2;
 		// add our player to the scene
         this.scene.add.existing(this);
 
@@ -81,7 +84,7 @@ export default class FireTower extends Phaser.Physics.Arcade.Sprite {
     }
 
     fireBullet() {
-        this.bullets.fireBullet(this.myTarget);
+        this.bullets.fireBullet({x: this.x, y: this.y - 26}, this.myTarget);
         //this.scene.physics.pause();
     }
 
@@ -100,5 +103,36 @@ export default class FireTower extends Phaser.Physics.Arcade.Sprite {
         this.bullets.children.entries.forEach((bullet) => {
             bullet.update(time, delta);
         });
+        
+        let reduce = this.reduceVelocity * delta;
+        if(this.body.velocity.x > 0) {
+            if (this.body.velocity.x - reduce <= 0) {
+                this.setVelocityX(0);
+            } else {
+                this.setVelocityX(this.body.velocity.x - reduce);
+            }
+        } else {
+            if (this.body.velocity.x + reduce >= 0) {
+                this.setVelocityX(0);
+            } else {
+                this.setVelocityX(this.body.velocity.x + reduce);
+            }
+        }
+    
+        if(this.body.velocity.y > 0) {
+            if (this.body.velocity.y - this.reduceVelocity <= 0) {
+                this.setVelocityY(0);
+            } else {
+                this.setVelocityY(this.body.velocity.y - this.reduceVelocity);
+            }
+        } else {
+            if (this.body.velocity.y + this.reduceVelocity >= 0) {
+                this.setVelocityY(0);
+            } else {
+                this.setVelocityY(this.body.velocity.y + this.reduceVelocity);
+            }
+        }
+        
+        //console.log(this.body.velocity.y);
     }
 }

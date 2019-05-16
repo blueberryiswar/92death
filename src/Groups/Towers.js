@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import Spawner from '../Characters/Spawner';
 import FireTower from '../Characters/FireTower';
 
-export default class Towers extends Phaser.Physics.Arcade.StaticGroup {
+export default class Towers extends Phaser.Physics.Arcade.Group {
     constructor(world, scene) {
         super(world, scene);
         this.scene = scene;
