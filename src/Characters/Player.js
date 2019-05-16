@@ -6,7 +6,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 		this.scene = scene;
 		this.health = 5;
         this.invulnerable = false;
-        this.moveSpeed = 70;
+        this.moveSpeed = 90;
         this.direction = 'up';
         this.diagonal = false;
         this.setAnimations();

@@ -14,6 +14,10 @@ export default class Ghost extends Phaser.Physics.Arcade.Sprite {
         this.myTarget = this.scene.target;
         this.tolerance = 10;
         this.currentTarget = { x: this.myTarget.x, y: this.myTarget.y };
+        this.blocked = {
+            x: 0,
+            y: 0
+        };
 
         this.moveSpeed = Phaser.Math.Between(15, 25);
         this.targetPadding = {
@@ -96,6 +100,15 @@ export default class Ghost extends Phaser.Physics.Arcade.Sprite {
         return false;
     }
 
+    nearEnough(value1, value2) {
+        const distance = value1 - value2;
+        if (Math.abs(distance) < 1) {
+            return true;
+        }
+        return false;
+
+    }
+
     update() {
 
         // check if the up or down key is pressed
@@ -105,25 +118,37 @@ export default class Ghost extends Phaser.Physics.Arcade.Sprite {
         };
         console.log(distance);
         if (Math.abs(distance.y) + Math.abs(distance.x) > this.tolerance) {
-            if (Math.abs(distance.y) > Math.abs(distance.x) && !this.body.touching.up && !this.body.touching.down || this.body.touching.left && this.body.touching.right) {
-                if (distance.y > 0) {
+            if (Math.abs(distance.y) > Math.abs(distance.x) || this.nearEnough(this.blocked.y, this.y)) {
+                if (distance.y > 0 || this.body.blocked.up) {
                     this.setVelocityY(this.moveSpeed * -1);
                     this.direction = 'up';
                     this.anims.play("ghostUp", true);
+                    if(this.body.blocked.up) {
+                        this.blocked.x = this.x;
+                    } 
                 } else {
                     this.setVelocityY(this.moveSpeed);
                     this.direction = 'down';
                     this.anims.play("ghostDown", true);
+                    if(this.body.blocked.down) {
+                        this.blocked.x = this.x;
+                    }
                 }
             } else {
                 if (distance.x > 0) {
                     this.setVelocityX(this.moveSpeed * -1);
                     this.direction = 'left';
                     this.anims.play("ghostLeft", true);
+                    if(this.body.blocked.left) {
+                        this.blocked.y = this.y;
+                    }
                 } else {
                     this.setVelocityX(this.moveSpeed);
                     this.direction = 'right';
-                    this.anims.play("ghostLeft", true);
+                    this.anims.play("ghostRight", true);
+                    if(this.body.blocked.right) {
+                        this.blocked.y = this.y;
+                    }
                 }
             }
         } else {
