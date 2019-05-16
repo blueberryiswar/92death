@@ -41,7 +41,7 @@ export default class Irrlicht extends Phaser.Physics.Arcade.Sprite {
         this.scene.anims.create({
             key: 'irrlichtExplode',
             frames: this.scene.anims.generateFrameNumbers('irrlicht', { start: 3, end: 8 }),
-            frameRate: 5,
+            frameRate: 8,
             repeat: 0
         });
         this.anims.play("irrlichtMove", true);

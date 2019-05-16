@@ -58,11 +58,11 @@ export default class Bullets extends Phaser.Physics.Arcade.Group {
         }
     }
 
-    fireBullet(target) {
+    fireBullet(source, target) {
         const bullet = this.getFirstFree(false);
         console.log(bullet);
         if (bullet) {
-            bullet.fireAt(this.position, target);
+            bullet.fireAt(source, target);
         }
     }
 

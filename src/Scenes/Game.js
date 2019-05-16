@@ -36,11 +36,13 @@ export default class GameScene extends Phaser.Scene {
 		//this.spawner = new Spawner(this, 125, 40, 500, 50, 'ghost');
 		this.createSpawners();
 		this.createTowerGroup();
-		this.physics.add.collider([this.player], 
+
+		this.physics.add.collider([this.player, this.towerGroup], 
 			[this.layers.blocked.first, this.layers.blocked.second]);
 		this.physics.add.collider([this.enemies], 
 				[this.layers.blocked.first, this.layers.blocked.second]);
 		this.physics.add.collider([this.enemies, this.player], this.enemies);
+
 		this.physics.add.overlap(this.enemies, this.target, (target, enemy) => {
 			let damage = enemy.damage;
 			if (!target.portalOpen) {
