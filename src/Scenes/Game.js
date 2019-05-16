@@ -37,7 +37,9 @@ export default class GameScene extends Phaser.Scene {
 		this.createSpawners();
 		this.createTowerGroup();
 		this.physics.add.collider([this.player], 
-			[this.layers.blocked]);
+			[this.layers.blocked.first, this.layers.blocked.second]);
+		this.physics.add.collider([this.enemies], 
+				[this.layers.blocked.first, this.layers.blocked.second]);
 		this.physics.add.collider([this.enemies, this.player], this.enemies);
 		this.physics.add.overlap(this.enemies, this.target, (target, enemy) => {
 			let damage = enemy.damage;
@@ -101,16 +103,18 @@ export default class GameScene extends Phaser.Scene {
 	}
 
 	createMap() {
-		//this.map = this.make.tilemap({key: "play"});
-		//this.tiles = this.map.addTilesetImage('greenerror');
-		this.map = this.make.tilemap({key: "greenZone"});
-		this.tiles = this.map.addTilesetImage('greenZone', 'greenZone', 16, 16, 1, 2);
+		this.map = this.make.tilemap({key: "graveyard"});
+		this.tiles = this.map.addTilesetImage('graveyard', 'graveyard', 16, 16, 1, 2);
 		this.layers.background = {};
+		this.layers.blocked = {};
 		this.layers.background.first = this.map.createStaticLayer("Background1", this.tiles, 0, 0);
 		this.layers.background.second = this.map.createStaticLayer("Background2", this.tiles, 0, 0);
 		this.layers.background.third = this.map.createStaticLayer("Background3", this.tiles, 0, 0);
-		this.layers.blocked = this.map.createStaticLayer("Blocked1", this.tiles, 0,0);
-		this.layers.blocked.setCollisionByExclusion([-1]);
+		this.layers.blocked.first = this.map.createStaticLayer("Blocked1", this.tiles, 0, 0);
+		this.layers.blocked.first.setCollisionByExclusion([-1]);
+		this.layers.blocked.second = this.map.createStaticLayer("Blocked2", this.tiles, 0, 0);
+		this.layers.blocked.second.setCollisionByExclusion([-1]);
+		this.layers.foreground = this.map.createStaticLayer("Foreground", this.tiles, 0, 0);
 	}
 
 	createSpawners() {
