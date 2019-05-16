@@ -4,6 +4,7 @@ import Enemies from "../Groups/Enemies";
 import Spawners from "../Groups/Spawners";
 import Target from "../Characters/Target";
 import Towers from "../Groups/Towers";
+import { compileFunction } from "vm";
 
 
 export default class GameScene extends Phaser.Scene {
@@ -18,11 +19,16 @@ export default class GameScene extends Phaser.Scene {
 		this.wave = 1;
 		this.waves = 5;
 		this.toDefeat = 0;
+		this.controls = {};
+		this.debug = false;
 	}
 
 	create() {
 		this.createMap();
 		this.cursors = this.input.keyboard.createCursorKeys();
+		this.controls.spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+		this.controls.gKey = this.input.keyboard.addKey('G');
+
 		this.createPlayer();
 		this.createTarget();
 		this.setUpCamera();
@@ -60,6 +66,14 @@ export default class GameScene extends Phaser.Scene {
 		this.towerGroup.children.entries.forEach(
 			(child) => { child.update(time, delta); }
 		)
+
+		if (this.controls.gKey.isDown) {
+			if(!this.debug) {
+				console.log(this);
+				this.physics.world.createDebugGraphic();
+				this.debug = true;
+			}
+		}
 		
 	}
 

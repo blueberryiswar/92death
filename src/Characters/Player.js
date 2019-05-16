@@ -11,6 +11,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this.diagonal = false;
         this.setAnimations();
         this.stunned = true;
+        this.bucks = 20;
         //this.tint = 0xff0000;
 
 		// enable physics
@@ -179,5 +180,17 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
     unstun() {
         this.stunned = false;
+    }
+
+    getMoney(amount) {
+        this.money += amount;
+    }
+
+    spendMoney(amount) {
+        if(this.money - amount >= 0) {
+            this.money -= amount;
+            return true;
+        }
+        return false;
     }
 }
