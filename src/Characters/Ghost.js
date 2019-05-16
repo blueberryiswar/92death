@@ -76,8 +76,8 @@ export default class Ghost extends Phaser.Physics.Arcade.Sprite {
         if (this.path) {
             if (this.path.polyline.length > this.pathcounter) {
                 const path = this.path.polyline[this.pathcounter];
-                this.currentTarget.x = this.x + path.x;
-                this.currentTarget.y = this.y + path.y;
+                this.currentTarget.x = this.path.x + path.x;
+                this.currentTarget.y = this.path.y + path.y;
                 this.pathcounter++;
                 return;
             }
@@ -105,7 +105,7 @@ export default class Ghost extends Phaser.Physics.Arcade.Sprite {
         };
         console.log(distance);
         if (Math.abs(distance.y) + Math.abs(distance.x) > this.tolerance) {
-            if (Math.abs(distance.y) > Math.abs(distance.x)) {
+            if (Math.abs(distance.y) > Math.abs(distance.x) && !this.body.touching.up && !this.body.touching.down || this.body.touching.left && this.body.touching.right) {
                 if (distance.y > 0) {
                     this.setVelocityY(this.moveSpeed * -1);
                     this.direction = 'up';
