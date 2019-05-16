@@ -1,7 +1,8 @@
 import Phaser from 'phaser';
+import FireBomb from '../Characters/FireBomb';
 
 export default class Bullets extends Phaser.Physics.Arcade.Group {
-    constructor(world, scene, type, position) {
+    constructor(world, scene, type, position, amount) {
         super(world, scene);
         this.scene = scene;
         this.type = type;
@@ -15,41 +16,32 @@ export default class Bullets extends Phaser.Physics.Arcade.Group {
         switch(type) {
             case 'fireBomb':
                 key = 'fireBomb';
-                count = 4;
+           
                 this.damage = 5;
                 break;
             default:
                 console.warn("Unknown bullet type: " + type);
                 return;
         }
+        for(let i=0; i < amount; i++) {
+            let bullet = undefined;
+            switch(type) {
+                case 'fireBomb':
+                    bullet = new FireBomb(this.scene, this.position.x, this.position.y);
+                    break;
+                default:
+                    return; 
+            }
+            if (bullet) {
+                bullet.deactivate();
+                this.add(bullet);
+            }
+        }
 
-        this.createMultiple({
-            frameQuantity: count,
-            key: key,
-            active: false,
-            visible: false
-        });
 
-        this.setAnimations();
         this.scene.physics.add.overlap(this, this.scene.enemies, (bullet, enemy) => {
             this.enemyCollision(bullet, enemy)
         });
-    }
-
-    setAnimations() {
-        switch(this.type) {
-            case 'fireBomb':
-            this.animationKey = 'fireBombFlight';
-            this.scene.anims.create({
-                key: this.animationKey,
-                frames: this.scene.anims.generateFrameNumbers('fireBomb', { start: 0, end: 3 }),
-                frameRate: 6,
-                repeat: 0
-            });
-            break;
-            default:
-            break;
-        }
     }
 
     enemyCollision(bullet, enemy) {
@@ -57,23 +49,24 @@ export default class Bullets extends Phaser.Physics.Arcade.Group {
         enemy.takeDamage(this.damage);
     }
 
-    fireBullet(x, y) {
-        const bullet = this.getFirstDead(false);
+    getFirstFree() {
+        console.log(this.children.entries);
+        for(let i=0; i < this.children.entries.length; i++) {
+            const bullet = this.children.entries[i];
+
+            if(!bullet.active) return bullet;
+        }
+    }
+
+    fireBullet(target) {
+        const bullet = this.getFirstFree(false);
+        console.log(bullet);
         if (bullet) {
-            bullet.enableBody(true);
-            bullet.active = true;
-            bullet.visible = true;
-            bullet.setPosition(this.position.x, this.position.y);
-            bullet.anims.play(this.animationKey, true);
-            bullet.rotation = this.scene.physics
-                .accelerateTo(bullet, x, y, 80);
+            bullet.fireAt(this.position, target);
         }
     }
 
     deactivateBullet(bullet) {
-        bullet.disableBody();
-        bullet.active = false;
-        bullet.visible = false;
-        bullet.setVelocity(0);
+        bullet.deactivate();
     }
 }
