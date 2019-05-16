@@ -102,7 +102,7 @@ export default class Ghost extends Phaser.Physics.Arcade.Sprite {
 
     nearEnough(value1, value2) {
         const distance = value1 - value2;
-        if (Math.abs(distance) < this.tolerance) {
+        if (Math.abs(distance) < 1) {
             return true;
         }
         return false;
