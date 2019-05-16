@@ -6,11 +6,11 @@ export default class SkullTower extends Phaser.Physics.Arcade.Sprite {
         super(scene, x, y, 'fireTower', 0);
 
         this.scene = scene;
-        this.damage = 5;
+        this.damage = 1;
         this.rangeX = 200;
         this.rangeY = 200;
         this.reloading = false;
-        this.reloadTime = 2400;
+        this.reloadTime = 3500;
         this.reloadCurrent = 2000;
         this.bullets = new Bullets(this.scene.physics.world, this.scene, 'fireBomb', {x: this.x, y: this.y - 26}, 5);
         this.setAnimations();

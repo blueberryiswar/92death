@@ -14,7 +14,7 @@ export default class Enemies extends Phaser.Physics.Arcade.Group {
         // add spriteArray enemies to our Group
     
         spriteArray.forEach(sprite => {
-            const enemy = this.getNewEnemy(sprite.type, sprite.x, sprite.y);
+            const enemy = this.getNewEnemy(sprite.type, sprite.x, sprite.y, sprite.path);
             // add to our group
             this.add(enemy);
             // destroy the sprite
@@ -22,11 +22,11 @@ export default class Enemies extends Phaser.Physics.Arcade.Group {
         });
     }
 
-    getNewEnemy(type, x, y) {
+    getNewEnemy(type, x, y, path) {
         let enemy = undefined;
         switch(type) {
             case "ghost":
-            enemy = new Ghost(this.scene, x, y);
+            enemy = new Ghost(this.scene, x, y, path);
             break;
             case "irrlicht":
             enemy = new Irrlicht(this.scene, x, y);
