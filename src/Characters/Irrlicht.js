@@ -7,6 +7,7 @@ export default class Irrlicht extends Enemy {
         this.damage = 1;
         this.setAnimations();
         this.moveSpeed = 10;
+        this.exploding = false;
         this.targetPadding = {
             x: Phaser.Math.Between(-15, 15),
             y: Phaser.Math.Between(-15, 15)
@@ -44,9 +45,12 @@ export default class Irrlicht extends Enemy {
 
     skill(target) {
         this.explode();
+        target.takeDamage(this.damage, this);
     }
 
     explode() {
+        if(this.exploding) return;
+        this.explpding = true;
         this.anims.play('irrlichtExplode', true);
         this.scene.enemyDeath();
         this.scene.time.addEvent({

@@ -5,9 +5,9 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         super(scene, x, y, 'player', 0);
         this.scene = scene;
         this.health = 6;
-        this.moveSpeed = 80;
+        this.moveSpeed = 100;
         this.direction = 'up';
-        this.flash = 10;
+        this.flash = 80;
         this.cooldowns = {
             scythe: {
                 cooldown: 400,
@@ -166,25 +166,29 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     update(delta, cursors) {
+        let animationLock = false;
+        //this.tint = 0xffffff;
+
+        if (this.invulnerable > 0) {
+            console.log("Player invulnerable");
+            this.invulnerable -= delta * 1;
+            if (this.flash > 0) {
+                console.log("flash");
+                this.tint = 0xaaccee;
+                this.flash -= delta * 1;
+            } else if (this.flash > -40 && this.flash < 0) {
+                this.tint = 0xffffff;
+            } else {
+                this.flash = 100;
+            }
+        }
+
         if (this.stunned > 0) {
             this.stunned -= 1 * delta;
             return
         }
-        let animationLock = false;
+
         this.setVelocity(0);
-        this.tint = 0xffffff;
-
-        if (this.invulnerable > 0) {
-            this.invulnerable -= delta * 1;
-            if (this.flash > 0) {
-                this.tint = 0xffff00;
-                this.flash -= delta * 1;
-            } else {
-                this.tint = 0xffffff;
-                this.flash = 10;
-            }
-        }
-
 
         if(this.cooldowns.scythe.current > 0) {
             this.cooldowns.scythe.current -= delta * 1;
@@ -259,35 +263,21 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         console.log('Hit by ' + from);
         if(this.invulnerable > 0) return;
         this.impactFrom(from);
-        //this.health -= damage;
+        this.health -= damage;
         this.scene.events.emit('loseHealth', this.health);
         if (this.health <= 0) {
             this.scene.gameOver();
         }
-        this.invulnerable = 200;
-        this.stunned = 120;
+        this.invulnerable = 1500;
+        this.stunned = 200;
     }
 
     impactFrom(obj) {
         let distance = {};
         distance.x = this.x - obj.x;
         distance.y = this.y - obj.y;
-        this.setVelocity(distance.x * 10, distance.y * 10);
-    }
-
-    enemyCollision() {
-        if (!this.invulnerable) {
-            this.loseHealth();
-            this.tint = 0xff0000;
-            this.scene.time.addEvent({
-                delay: 1200,
-                callback: () => {
-                    this.invulnerable = false;
-                    this.tint = 0xffffff;
-                },
-                callbackScope: this
-            });
-        }
+        this.setVelocity(0);
+        this.setVelocity(distance.x * 12, distance.y * 12);
     }
 
     appear() {

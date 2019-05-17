@@ -77,7 +77,7 @@ export default class Ghost extends Enemy {
         this.anims.stop();
         this.attackAnimation.restart();
         this.animationLock = 300;
-        //target.takeDamage(this.damage, this);
+        target.takeDamage(this.damage, this);
     }
 
     myLoop(delta) {
