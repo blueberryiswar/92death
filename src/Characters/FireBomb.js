@@ -26,11 +26,11 @@ export default class FireBomb extends Bullet {
         this.rotation = this.scene.physics
                 .accelerateToObject(this, target, this.speed);
         this.anims.play('fireBomb');
-        this.scene.add.sprite({
-            key: 'aoe',
-            x: target.x,
-            y: target.y
-        }, true);
+        //this.scene.add.sprite({
+        //    key: 'aoe',
+        //    x: target.x,
+        //    y: target.y
+        //}, true);
     }
 
 }

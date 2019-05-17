@@ -30,7 +30,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this.setAnimations();
         this.stunned = true;
         this.invulnerable = 0;
-        this.bucks = 20;
+        this.bucks = 30;
         //this.tint = 0xff0000;
         this.createSelector();
         this.deactivateSelector();
@@ -415,8 +415,6 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this.selector.disableBody();
         this.selector.active = false;
         this.selector.visible = false;
-        this.selector.x = 0;
-        this.selector.y = 0;
         this.selector.setVelocity(0);
     }
 }
