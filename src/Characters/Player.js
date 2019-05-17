@@ -12,7 +12,9 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
             scythe: {
                 cooldown: 400,
                 current: 0,
-                damage: 1
+                damage: 1,
+                impact: 200,
+                stun: 300
             }
         };
         this.lastVelocity = {
@@ -127,26 +129,26 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         let position = {
             x: this.x,
             y: this.y,
-            width: 100,
-            height: 50
+            width: 80,
+            height: 30
         };
         switch(this.direction){
             case "up":
-                position.y += -32;
+                position.y += -10;
                 this.anims.play('scytheUp', true);
                 break;
             case "down":
-                position.y += 32;
+                position.y += 25;
                 this.anims.play('scytheDown', true);
                 break;
             case "left":
-                position.x -= 16;
+                position.x -= 12;
                 position.height = 100;
                 position.width = 50;
                 this.anims.play('scytheLeft', true);
                 break;
             case "right":
-                position.x += 16;
+                position.x += 12;
                 position.height = 100;
                 position.width = 50;
                 this.anims.play('scytheRight', true);
@@ -159,8 +161,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
         within.forEach((body) => {
             if(body.gameObject.towerTarget) {
-                body.gameObject.impactFrom(this);
-                body.gameObject.takeDamage(this.cooldowns.scythe.damage);
+                body.gameObject.takeDamage(this, this.cooldowns.scythe.damage, 
+                    this.cooldowns.scythe.impact, this.cooldowns.scythe.stun);
             }
         });
     }
@@ -262,7 +264,11 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     takeDamage(damage, from) {
         console.log('Hit by ' + from);
         if(this.invulnerable > 0) return;
-        this.impactFrom(from);
+        let impact = 200;
+        if(from.impact > 0) {
+            impact = from.impact;
+        }
+        this.impactFrom(from, impact);
         this.health -= damage;
         this.scene.events.emit('loseHealth', this.health);
         if (this.health <= 0) {
@@ -272,12 +278,17 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this.stunned = 200;
     }
 
-    impactFrom(obj) {
+    impactFrom(obj, impact) {
         let distance = {};
         distance.x = this.x - obj.x;
         distance.y = this.y - obj.y;
+        distance.total = Math.abs(distance.x) + Math.abs(distance.y)
+        distance.px = Math.abs(distance.x) / distance.total;
+        distance.py = Math.abs(distance.y) / distance.total;
+        distance.x = Math.floor(distance.px * impact);
+        distance.y = Math.floor(distance.py * impact);
         this.setVelocity(0);
-        this.setVelocity(distance.x * 12, distance.y * 12);
+        this.setVelocity(distance.x, distance.y);
     }
 
     appear() {

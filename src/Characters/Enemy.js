@@ -6,6 +6,7 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
         this.scene = scene;
         this.health = 5;
         this.monies = 1;
+        this.impact = 200; // Impact of skill towards Player
         this.skillOnCooldown = 0;
         this.cooldown = 800;
         this.damage = 1;
@@ -82,7 +83,6 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     update(delta) {
         if(this.stunned > 0) {
             this.stunned -= 1 * delta;
-            this.reduceForce(delta);
             if (this.flash > 0) {
                 this.tint = 0xff5500;
                 this.flash -= 1 * delta;
@@ -164,16 +164,33 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
         this.destroy();
     }
     
-    impactFrom(obj) {
+    impactFrom(obj, impact) {
         let distance = {};
         distance.x = this.x - obj.x;
         distance.y = this.y - obj.y;
-        this.setVelocity(distance.x * 5 / this.weight, distance.y * 5 / this.weight);
+        if (distance.y > 0) {
+            distance.dirY = 1;
+        } else {
+            distance.dirY = -1;
+        }
+        if (distance.x > 0) {
+            distance.dirX = 1;
+        } else {
+            distance.dirX = -1;
+        }
+        distance.total = Math.abs(distance.x) + Math.abs(distance.y)
+        distance.px = Math.abs(distance.x) / distance.total;
+        distance.py = Math.abs(distance.y) / distance.total;
+        distance.x = Math.floor(distance.px * impact / this.weight * distance.dirX);
+        distance.y = Math.floor(distance.py * impact / this.weight * distance.dirY);
+        this.setVelocity(0);
+        this.setVelocity(distance.x, distance.y);;
     }
 
-    takeDamage(damage) {
+    takeDamage(source, damage, impact = 200, stun = 200) {
         this.health -= damage;
-        this.stunned = 200;
+        this.stunned = stun;
+        this.impactFrom(source, impact);
         if (this.health <= 0) {
             this.scene.enemyDeath();
             this.scene.player.getMoney(this.monies);
