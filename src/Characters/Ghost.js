@@ -54,15 +54,17 @@ export default class Ghost extends Enemy {
           targets: this,
           props: {
               scaleX: {
-                value: 500,
+                value: 1.8,
                 ease: 'Power1',
-                duration: 300
+                duration: 150,
+                yoyo: true
               },
               scaleY: {
-                value: 200,
+                value: 1.3,
                 ease: 'Quad.easeInOut',
-                duration: 100
-              }
+                duration: 80,
+                yoyo: true
+              },
           }
         });
     }
