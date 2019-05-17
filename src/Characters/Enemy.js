@@ -173,7 +173,7 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
 
     takeDamage(damage) {
         this.health -= damage;
-        this.stunned = 100;
+        this.stunned = 200;
         if (this.health <= 0) {
             this.scene.enemyDeath();
             this.scene.player.getMoney(this.monies);
