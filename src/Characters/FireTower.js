@@ -11,7 +11,7 @@ export default class FireTower extends Phaser.Physics.Arcade.Sprite {
         this.rangeX = 200;
         this.rangeY = 200;
         this.reloading = false;
-        this.reloadTime = 2400;
+        this.reloadTime = 3400;
         this.reloadCurrent = 2000;
         this.bullets = new Bullets(this.scene.physics.world, this.scene, 'fireBomb', {x: this.x, y: this.y - 26}, 5);
         console.log(this);
@@ -70,21 +70,16 @@ export default class FireTower extends Phaser.Physics.Arcade.Sprite {
 
     fireAt(target) {
         if(this.reloadCurrent > 0) return;
+        this.on('animationcomplete', this.fireBullet, this);
         this.anims.play('fireTowerShoot', true);
         this.myTarget = target;
         //target.takeDamage(this.damage);
-        
-        this.reloadTower();
-        this.scene.time.addEvent({
-            delay: 900,
-            callbackScope: this,
-            callback: this.fireBullet,
-            loop: false
-        });
     }
 
     fireBullet() {
+        if(this.reloadCurrent > 0) return;
         this.bullets.fireBullet({x: this.x, y: this.y - 26}, this.myTarget);
+        this.reloadTower();
         //this.scene.physics.pause();
     }
 

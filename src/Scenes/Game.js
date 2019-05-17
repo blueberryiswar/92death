@@ -60,9 +60,9 @@ export default class GameScene extends Phaser.Scene {
 	}
 
 	update(time, delta) {
-		this.player.update(this.cursors);
+		this.player.update(delta, this.cursors);
 		if (this.enemyPointer < this.enemies.children.entries.length) {
-			this.enemies.children.entries[this.enemyPointer].update();
+			this.enemies.children.entries[this.enemyPointer].update(delta);
 			this.enemyPointer++;
 		} else {
 			this.enemyPointer = 0;

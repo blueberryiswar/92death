@@ -391,7 +391,7 @@
   <object id="1" name="target" type="target" x="432" y="670">
    <point/>
   </object>
-  <object id="5" name="playerStart" type="playerStart" x="442" y="638">
+  <object id="5" name="playerStart" type="playerStart" x="440" y="380">
    <point/>
   </object>
  </objectgroup>

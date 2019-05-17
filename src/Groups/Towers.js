@@ -13,7 +13,7 @@ export default class Towers extends Phaser.Physics.Arcade.Group {
             y: 289
         };
         if(tower) {
-            this.createTower(tower);
+            //this.createTower(tower);
         }
     }
 

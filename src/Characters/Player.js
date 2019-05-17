@@ -8,6 +8,13 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this.invulnerable = false;
         this.moveSpeed = 80;
         this.direction = 'up';
+        this.cooldowns = {
+            scythe: {
+                cooldown: 400,
+                current: 0,
+                damage: 1
+            }
+        };
         this.lastVelocity = {
             y: 0,
             x: 0
@@ -83,11 +90,91 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
             repeat: -1
         });
 
+        this.scene.anims.create({
+            key: 'scytheLeft',
+            frames: this.scene.anims.generateFrameNumbers('scythe', { start: 0, end: 1}),
+            frameRate: 6,
+            repeat: 0
+        });
+
+        this.scene.anims.create({
+            key: 'scytheRight',
+            frames: this.scene.anims.generateFrameNumbers('scythe', { start: 2, end: 3}),
+            frameRate: 6,
+            repeat: 0
+        });
+
+        this.scene.anims.create({
+            key: 'scytheUp',
+            frames: this.scene.anims.generateFrameNumbers('scythe', { start: 4, end: 5}),
+            frameRate: 5,
+            repeat: 0
+        });
+
+        this.scene.anims.create({
+            key: 'scytheDown',
+            frames: this.scene.anims.generateFrameNumbers('scythe', { start: 6, end: 7}),
+            frameRate: 5,
+            repeat: 0
+        });
+
     }
 
-    update(cursors) {
+    hitWithScythe() {
+        if (this.cooldowns.scythe.current > 0) return;
+        this.cooldowns.scythe.current = this.cooldowns.scythe.cooldown;
+        let position = {
+            x: this.x,
+            y: this.y,
+            width: 100,
+            height: 50
+        };
+        switch(this.direction){
+            case "up":
+                position.y += -32;
+                this.anims.play('scytheUp', true);
+                break;
+            case "down":
+                position.y += 32;
+                this.anims.play('scytheDown', true);
+                break;
+            case "left":
+                position.x -= 16;
+                position.height = 100;
+                position.width = 50;
+                this.anims.play('scytheLeft', true);
+                break;
+            case "right":
+                position.x += 16;
+                position.height = 100;
+                position.width = 50;
+                this.anims.play('scytheRight', true);
+            default:
+                break;
+        }
+        var x = position.x - (position.width / 2);
+        var y = position.y - (position.height / 2);
+        var within = this.scene.physics.overlapRect(x, y, position.width, position.height);
+
+        within.forEach((body) => {
+            if(body.gameObject.towerTarget) {
+                body.gameObject.impactFrom(this);
+                body.gameObject.takeDamage(this.cooldowns.scythe.damage);
+            }
+        });
+    }
+
+    update(delta, cursors) {
         this.buttonpressed = false;
         if (this.stunned) return;
+
+        if(this.cooldowns.scythe.current > 0) {
+            this.cooldowns.scythe.current -= delta * 1;
+        }
+        if(this.scene.controls.spaceKey.isDown) {
+            this.hitWithScythe();
+            return
+        }
         // check if the up or down key is pressed
         let velocity = {
             x: 0,
@@ -126,12 +213,12 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
             if (velocity.y === 0) {
                 if (!this.lastVelocity.y === 0) {
                     if ( this.lastVelocity.y > 0){
-                        this.play('idleup', true);
+                        this.play('idleup', false);
                     } else {
-                        this.play('idledown', true);
+                        this.play('idledown', false);
                     }
                 } else {
-                    this.play('idleside', true);
+                    this.play('idleside', false);
                 }
                 
             } 

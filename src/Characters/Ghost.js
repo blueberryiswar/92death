@@ -8,6 +8,7 @@ export default class Ghost extends Phaser.Physics.Arcade.Sprite {
         this.damage = 1;
         this.setAnimations();
         this.z = 50;
+        this.reduceVelocity = 5;
         this.towerTarget = true;
         this.path = path;
         this.pathcounter = 0;
@@ -111,7 +112,12 @@ export default class Ghost extends Phaser.Physics.Arcade.Sprite {
 
     }
 
-    update() {
+    update(delta) {
+        if(this.stunned > 0) {
+            this.stunned -= 1 * delta;
+            this.reduceForce(delta);
+            return;
+        }
 
         // check if the up or down key is pressed
         const distance = {
@@ -159,15 +165,6 @@ export default class Ghost extends Phaser.Physics.Arcade.Sprite {
         }
     }
 
-    loseHealth() {
-        this.health--;
-        this.scene.events.emit('loseHealth', this.health);
-        if (this.health === 0) {
-            this.scene.loadNextLevel(true);
-        }
-        this.invulnerable = true;
-    }
-
     enemyCollision() {
         if (!this.invulnerable) {
             this.loseHealth();
@@ -184,18 +181,61 @@ export default class Ghost extends Phaser.Physics.Arcade.Sprite {
     }
 
     doDamage(target) {
+        if(this.stunned) return;
         this.takeDamage(5);
     }
 
     enterGate() {
         this.destroy();
     }
+    
+    impactFrom(obj) {
+        let distance = {};
+        distance.x = this.x - obj.x;
+        distance.y = this.y - obj.y;
+        this.setVelocity(distance.x * 5, distance.y * 5);
+    }
 
     takeDamage(damage) {
         this.health -= damage;
+        this.tint = 0xff0000;
+        this.stunned = 500;
         if (this.health <= 0) {
             this.scene.enemyDeath();
+            this.active = false;
+            this.visible = false;
             this.destroy();
+        }
+    }
+
+    reduceForce(delta) {
+        let reduce = this.reduceVelocity * delta;
+        if(this.body.velocity.x > 0) {
+            if (this.body.velocity.x - reduce <= 0) {
+                this.setVelocityX(0);
+            } else {
+                this.setVelocityX(this.body.velocity.x - reduce);
+            }
+        } else {
+            if (this.body.velocity.x + reduce >= 0) {
+                this.setVelocityX(0);
+            } else {
+                this.setVelocityX(this.body.velocity.x + reduce);
+            }
+        }
+    
+        if(this.body.velocity.y > 0) {
+            if (this.body.velocity.y - this.reduceVelocity <= 0) {
+                this.setVelocityY(0);
+            } else {
+                this.setVelocityY(this.body.velocity.y - this.reduceVelocity);
+            }
+        } else {
+            if (this.body.velocity.y + this.reduceVelocity >= 0) {
+                this.setVelocityY(0);
+            } else {
+                this.setVelocityY(this.body.velocity.y + this.reduceVelocity);
+            }
         }
     }
 }
