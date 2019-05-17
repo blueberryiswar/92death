@@ -1,24 +1,14 @@
-import Phaser from 'phaser';
 
-export default class Ghost extends Phaser.Physics.Arcade.Sprite {
+import Enemy from './Enemy';
+
+export default class Ghost extends Enemy {
     constructor(scene, x, y, path) {
-        super(scene, x, y, 'ghost', 0);
+        super(scene, x, y, 'ghost', path);
         this.scene = scene;
-        this.health = 5;
-        this.damage = 1;
+        
         this.setAnimations();
-        this.z = 50;
-        this.reduceVelocity = 5;
-        this.towerTarget = true;
-        this.path = path;
-        this.pathcounter = 0;
-        this.myTarget = this.scene.target;
+        
         this.tolerance = 10;
-        this.currentTarget = { x: this.myTarget.x, y: this.myTarget.y };
-        this.blocked = {
-            x: 0,
-            y: 0
-        };
 
         this.moveSpeed = Phaser.Math.Between(15, 25);
         this.targetPadding = {
@@ -26,26 +16,9 @@ export default class Ghost extends Phaser.Physics.Arcade.Sprite {
             y: Phaser.Math.Between(1, 8)
         };
 
-
-
-        if (this.path) {
-            this.currentTarget.x = this.path.x;
-            this.currentTarget.y = this.path.y;
-        }
-        //console.log(this.path);
-
-        // enable physics
-        this.scene.physics.world.enable(this);
-
         this.body.setSize(12, 12);
         this.body.setOffset(1, 1);
         this.setBounce(0.2);
-        //his.body.setCircle(6, 2,2);
-
-        //this.body.setSize(10, 10);
-        //this.body.setOffset(3, 10);
-        // add our player to the scene
-        this.scene.add.existing(this);
     }
 
     setAnimations() {
@@ -78,164 +51,26 @@ export default class Ghost extends Phaser.Physics.Arcade.Sprite {
         });
     }
 
-    pickNextTarget() {
-        if (this.path) {
-            if (this.path.polyline.length > this.pathcounter) {
-                const path = this.path.polyline[this.pathcounter];
-                this.currentTarget.x = this.path.x + path.x;
-                this.currentTarget.y = this.path.y + path.y;
-                this.pathcounter++;
-                return;
-            }
-        }
-        this.currentTarget.x = this.myTarget.x;
-        this.currentTarget.y = this.myTarget.y;
-    }
-
-    atLocation() {
-        const distance = Math.abs(this.x - this.currentTarget.x) + Math.abs(this.y - this.currentTarget.y);
-        if (distance > this.tolerance) {
-            this.pickNextTarget();
-            //console.log('at location');
-            return true;
-        }
-        return false;
-    }
-
-    nearEnough(value1, value2) {
-        const distance = value1 - value2;
-        //console.log(Math.floor(value1 / 16))
-        if (Math.abs(distance) < 1) {
-            return true;
-        }
-        return false;
-
-    }
-
-    update(delta) {
-        if(this.stunned > 0) {
-            this.stunned -= 1 * delta;
-            this.reduceForce(delta);
-            return;
-        }
-
-        // check if the up or down key is pressed
-        const distance = {
-            x:  this.x - this.currentTarget.x,
-            y: this.y - this.currentTarget.y
-        };
-        //console.log(distance);
-        if (Math.abs(distance.y) + Math.abs(distance.x) > this.tolerance) {
-            if (Math.abs(distance.y) > Math.abs(distance.x) || this.nearEnough(this.blocked.y, this.y)) {
-                if (distance.y > !this.nearEnough(this.blocked.x, this.x) || this.nearEnough(this.blocked.x, this.x) && this.distance.y > 0 || this.nearEnough(this.body.blocked.x, this.x) && this.distance.y < 0) {
-                    this.setVelocityY(this.moveSpeed * -1);
-                    this.direction = 'up';
-                    this.anims.play("ghostUp", true);
-                    if(this.body.blocked.up) {
-                        this.blocked.x = this.x;
-                    } 
-                } else {
-                    this.setVelocityY(this.moveSpeed);
-                    this.direction = 'down';
-                    this.anims.play("ghostDown", true);
-                    if(this.body.blocked.down) {
-                        this.blocked.x = this.x;
-                    }
-                }
-            } else {
-                if (distance.x > 0) {
-                    this.setVelocityX(this.moveSpeed * -1);
-                    this.direction = 'left';
-                    this.anims.play("ghostLeft", true);
-                    if(this.body.blocked.left) {
-                        this.blocked.y = this.y;
-                    }
-                } else {
-                    this.setVelocityX(this.moveSpeed);
-                    this.direction = 'right';
-                    this.anims.play("ghostRight", true);
-                    if(this.body.blocked.right) {
-                        this.blocked.y = this.y;
-                    }
-                }
-            }
-        } else {
-            this.pickNextTarget();
-            this.setVelocity(0);
-        }
-    }
-
-    enemyCollision() {
-        if (!this.invulnerable) {
-            this.loseHealth();
-            this.tint = 0xff0000;
-            this.scene.time.addEvent({
-                delay: 1200,
-                callback: () => {
-                    this.invulnerable = false;
-                    this.tint = 0xffffff;
-                },
-                callbackScope: this
-            });
-        }
-    }
-
-    doDamage(target) {
-        if(this.stunned) return;
-        this.takeDamage(5);
-    }
-
-    enterGate() {
-        this.destroy();
-    }
     
-    impactFrom(obj) {
-        let distance = {};
-        distance.x = this.x - obj.x;
-        distance.y = this.y - obj.y;
-        this.setVelocity(distance.x * 5, distance.y * 5);
+
+    myLoop(delta) {
+        
+        switch(this.direction) {
+            case 'up':
+            this.anims.play("ghostUp", true);
+            break;
+            case 'down':
+            this.anims.play("ghostDown", true);
+            break;
+            case 'left':
+            this.anims.play("ghostLeft", true);
+            break;
+            case 'right':
+            this.anims.play("ghostRight", true);
+            break;
+            default:
+            break;
+        }
     }
 
-    takeDamage(damage) {
-        this.health -= damage;
-        this.tint = 0xff0000;
-        this.stunned = 500;
-        if (this.health <= 0) {
-            this.scene.enemyDeath();
-            this.active = false;
-            this.visible = false;
-            this.destroy();
-        }
-    }
-
-    reduceForce(delta) {
-        let reduce = this.reduceVelocity * delta;
-        if(this.body.velocity.x > 0) {
-            if (this.body.velocity.x - reduce <= 0) {
-                this.setVelocityX(0);
-            } else {
-                this.setVelocityX(this.body.velocity.x - reduce);
-            }
-        } else {
-            if (this.body.velocity.x + reduce >= 0) {
-                this.setVelocityX(0);
-            } else {
-                this.setVelocityX(this.body.velocity.x + reduce);
-            }
-        }
-    
-        if(this.body.velocity.y > 0) {
-            if (this.body.velocity.y - this.reduceVelocity <= 0) {
-                this.setVelocityY(0);
-            } else {
-                this.setVelocityY(this.body.velocity.y - this.reduceVelocity);
-            }
-        } else {
-            if (this.body.velocity.y + this.reduceVelocity >= 0) {
-                this.setVelocityY(0);
-            } else {
-                this.setVelocityY(this.body.velocity.y + this.reduceVelocity);
-            }
-        }
-    }
 }

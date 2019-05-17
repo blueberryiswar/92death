@@ -167,10 +167,15 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     update(delta, cursors) {
         this.buttonpressed = false;
         if (this.stunned) return;
+        let animationLock = false;
 
         if(this.cooldowns.scythe.current > 0) {
             this.cooldowns.scythe.current -= delta * 1;
+            animationLock = true;
+        } else {
+            animationLock = false;
         }
+
         if(this.scene.controls.spaceKey.isDown) {
             this.hitWithScythe();
             return
@@ -183,12 +188,12 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         if (cursors.up.isDown) {
             velocity.y = -1 * this.moveSpeed;
             this.direction = 'up';
-            this.anims.play("up", true);
+            this.anims.play("up", !animationLock);
             this.lastVelocity = velocity;
         } else if (cursors.down.isDown) {
             velocity.y = this.moveSpeed;
             this.direction = 'down';
-            this.anims.play("down", true);
+            this.anims.play("down", !animationLock);
             this.lastVelocity = velocity;
         }
 
@@ -197,7 +202,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
             velocity.x = this.moveSpeed * -1;
             this.direction = 'left';
             if (velocity.y === 0) {
-                this.anims.play("sideway", true);
+                this.anims.play("sideway", !animationLock);
                 this.setFlipX(true);
             }
             this.lastVelocity = velocity;
@@ -205,7 +210,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
             velocity.x = this.moveSpeed;
             this.direction = 'right';
             if (velocity.y === 0) {
-                this.anims.play("sideway", true);
+                this.anims.play("sideway", !animationLock);
                 this.setFlipX(false);
             }
             this.lastVelocity = velocity;
