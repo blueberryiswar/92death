@@ -11,7 +11,7 @@ export default class FireTower extends Phaser.Physics.Arcade.Sprite {
         this.rangeX = 200;
         this.rangeY = 200;
         this.reloading = false;
-        this.reloadTime = 3400;
+        this.reloadTime = 1200;
         this.reloadCurrent = 2000;
         this.bullets = new Bullets(this.scene.physics.world, this.scene, 'fireBomb', {x: this.x, y: this.y - 26}, 5);
         console.log(this);

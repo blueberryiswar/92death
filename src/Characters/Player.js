@@ -8,13 +8,19 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this.moveSpeed = 100;
         this.direction = 'up';
         this.flash = 80;
+        this.canPlace = true;
         this.cooldowns = {
             scythe: {
                 cooldown: 400,
                 current: 0,
                 damage: 1,
                 impact: 200,
-                stun: 300
+                stun: 200
+            },
+            tower: {
+                cooldown: 400,
+                current: 0,
+                collision: 0
             }
         };
         this.lastVelocity = {
@@ -26,6 +32,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this.invulnerable = 0;
         this.bucks = 20;
         //this.tint = 0xff0000;
+        this.createSelector();
+        this.deactivateSelector();
 
         // enable physics
         this.scene.physics.world.enable(this);
@@ -204,6 +212,12 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
             this.hitWithScythe();
             return
         }
+
+        if(this.scene.controls.eKey.isDown && !this.placingTower && this.cooldowns.tower.current <= 0) {
+            this.placeTower();
+        }
+
+        
         // check if the up or down key is pressed
         let velocity = {
             x: 0,
@@ -259,6 +273,9 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         }
 
         this.setVelocity(velocity.x, velocity.y);
+        if(this.placingTower) {
+            this.handleSelector();
+        }
     }
 
     takeDamage(damage, from) {
@@ -306,16 +323,100 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     getMoney(amount) {
-        this.money += amount;
+        this.bucks += amount;
         this.scene.events.emit('buckschange', amount);
     }
 
     spendMoney(amount) {
-        if (this.money - amount >= 0) {
-            this.money -= amount;
+        if (this.bucks - amount >= 0) {
+            this.bucks -= amount;
             this.scene.events.emit('buckschange', -1 * amount);
             return true;
         }
         return false;
+    }
+    
+    createSelector() {
+        const coordinates = this.getCoordinates();
+        this.selector = this.scene.physics.add.sprite(coordinates.x, coordinates.y, 'fireTower', 11);
+        // enable physics
+        this.scene.physics.world.enable(this.selector);
+        // add our player to the scene
+        this.selector.setSize(32,32);
+        this.selector.setOffset(16, 16);
+        this.selector.alpha = 0.6;
+        this.scene.add.existing(this.selector);
+        this.scene.physics.add.overlap(this.selector, [this.scene.enemies, this.scene.towerGroup], (target, enemy) => {
+            target.alpha = 0.2;
+            console.log(this.selector);
+            this.canPlace = false;
+            this.cooldowns.tower.collision = this.cooldowns.tower.cooldown;
+		});
+    }
+
+    placeTower() {
+        this.placingTower = true;
+        const coordinates = this.getCoordinates();
+        this.selector.active = true;
+        this.selector.visible = true;
+        this.selector.enableBody();
+        
+    }
+
+    getCoordinates() {
+        let coordinates = {
+            x: this.x,
+            y: this.y
+        };
+        switch(this.direction) {
+            case 'up':
+                coordinates.y -= 42;
+                break;
+            case 'down':
+                coordinates.y += 42;
+                break;
+            case 'left':
+                coordinates.x -= 36;
+                break;
+            case 'right':
+                coordinates.x += 36;
+                break;
+            default:
+                console.warn("Unknown direction");
+        }
+        return coordinates;
+    }
+
+    handleSelector(delta) {
+        const coordinates = this.getCoordinates();
+        this.selector.x = coordinates.x;
+        this.selector.y = coordinates.y;
+        if (this.cooldowns.tower.collision > 0) {
+            this.cooldowns.tower.collision -= 1 * delta;
+        } else {
+            this.canPlace = true;
+            this.selector.alpha = 0.6;
+        }
+        if(this.scene.controls.eKey.isDown) {
+            if (this.canPlace && this.spendMoney(15)) {
+                this.scene.towerGroup.createTower({
+                    type: 'FireTower',
+                    x: this.selector.x,
+                    y: this.selector.y
+                });
+                this.deactivateSelector();
+                this.placingTower = false;
+                this.cooldowns.tower.current = this.cooldowns.tower.cooldown;
+            }
+        }
+    }
+
+    deactivateSelector() {
+        this.selector.disableBody();
+        this.selector.active = false;
+        this.selector.visible = false;
+        this.selector.x = 0;
+        this.selector.y = 0;
+        this.selector.setVelocity(0);
     }
 }
