@@ -5,9 +5,11 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
         super(scene, x, y, key, 0);
         this.scene = scene;
         this.health = 5;
+        this.monies = 1;
         this.damage = 1;
         this.direction = 'down';
         this.reduceVelocity = 5;
+        this.flash = 10;
         this.towerTarget = true;
         this.path = path;
         this.pathcounter = 0;
@@ -79,11 +81,18 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
         if(this.stunned > 0) {
             this.stunned -= 1 * delta;
             this.reduceForce(delta);
+            if (this.flash > 0) {
+                this.tint = 0xffff00;
+                this.flash -= 1 * delta;
+            } else {
+                this.tint = 0xffffff;
+                this.flash = 20;
+            }
             return;
         } else if(this.health <= 0) {
             return;
         }
-
+        this.tint = 0xffffff;
         // check if the up or down key is pressed
         const distance = {
             x:  this.x - this.currentTarget.x,
@@ -157,6 +166,7 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
         this.stunned = 300;
         if (this.health <= 0) {
             this.scene.enemyDeath();
+            this.scene.player.getMoney(this.monies);
             this.dying();
         }
     }
