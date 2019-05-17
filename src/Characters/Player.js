@@ -165,13 +165,14 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     update(delta, cursors) {
-        this.buttonpressed = false;
         if (this.stunned) return;
         let animationLock = false;
+        this.setVelocity(0);
 
         if(this.cooldowns.scythe.current > 0) {
             this.cooldowns.scythe.current -= delta * 1;
             animationLock = true;
+            return
         } else {
             animationLock = false;
         }
