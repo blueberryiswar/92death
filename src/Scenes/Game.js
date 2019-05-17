@@ -39,16 +39,18 @@ export default class GameScene extends Phaser.Scene {
 
 		this.physics.add.collider([this.player, this.towerGroup, this.enemies],
 			[this.layers.blocked.first, this.layers.blocked.second]);
-		this.physics.add.overlap([this.enemies],
+		/*this.physics.add.overlap([this.enemies],
 			[this.layers.blocked.first, this.layers.blocked.second], (obj1, obj2) => {
-				obj2.takeDamage(500);
-			});
+				console.log(obj1);
+				console.log('second');
+				console.log(obj2);
+				obj1.takeDamage(500);
+
+			}); */
 		this.physics.add.collider(this.enemies, this.player, (player, enemy) => {
 			enemy.doDamage(player);
 		});
 		this.physics.add.collider(this.enemies, this.enemies);
-
-		console.log(this.layers.blocked);
 
 		this.physics.add.overlap(this.enemies, this.target, (target, enemy) => {
 			let damage = enemy.damage;
@@ -63,6 +65,7 @@ export default class GameScene extends Phaser.Scene {
 	}
 
 	gameOver() {
+		//this.physics.pause();
 		this.scene.restart();
 	}
 

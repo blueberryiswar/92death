@@ -98,6 +98,10 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
             this.skillOnCooldown -= 1 * delta;
         }
         this.tint = 0xffffff;
+        if (this.animationLock > 0) {
+            this.animationLock -= 1 * delta;
+            return;
+        }
         // check if the up or down key is pressed
         const distance = {
             x:  this.x - this.currentTarget.x,
@@ -147,8 +151,9 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     }
 
     doDamage(target) {
-        if(this.stunned) return;
+        if(this.stunned || this.skillOnCooldown > 0) return;
         this.skill(target);
+        this.skillOnCooldown = this.cooldown;
     }
 
     skill(target) {

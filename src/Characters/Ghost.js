@@ -49,10 +49,32 @@ export default class Ghost extends Enemy {
             frameRate: 4,
             repeat: -1
         });
+
+        this.attackAnimation = this.scene.tweens.add({
+          targets: this,
+          props: {
+              scaleX: {
+                value: 500,
+                ease: 'Power1',
+                duration: 300
+              },
+              scaleY: {
+                value: 200,
+                ease: 'Quad.easeInOut',
+                duration: 100
+              }
+          }
+        });
     }
 
     skill(target) {
-        target.takeDamage(this.damage, this);
+
+        console.log(this.attackAnimation);
+        console.log(this);
+        this.anims.stop();
+        this.attackAnimation.restart();
+        this.animationLock = 300;
+        //target.takeDamage(this.damage, this);
     }
 
     myLoop(delta) {

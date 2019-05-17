@@ -76,13 +76,13 @@ export default class Spawner extends Phaser.Physics.Arcade.Sprite {
                 case "Ghost":
                 case "ghost":
                     this.scene.enemies.createEnemies([{type: 'ghost', x: this.x, y: this.y, path: this.nearestPath}]);
-                    this.live--;
+                    //this.live--;
                     break;
                 case "Irrlicht":
                 case "irrlicht":
                     
                     this.scene.enemies.createEnemies([{type: 'irrlicht', x: this.x, y: this.y, path: this.nearestPath}]);
-                    this.live--;
+                    //this.live--;
                     break;
                 default:
                     break;

@@ -20,7 +20,7 @@
          "name":"Background1",
          "opacity":1,
          "type":"tilelayer",
-         "visible":true,
+         "visible":false,
          "width":60,
          "x":0,
          "y":0
@@ -32,7 +32,7 @@
          "name":"Background2",
          "opacity":1,
          "type":"tilelayer",
-         "visible":true,
+         "visible":false,
          "width":60,
          "x":0,
          "y":0
@@ -44,7 +44,7 @@
          "name":"Background3",
          "opacity":1,
          "type":"tilelayer",
-         "visible":true,
+         "visible":false,
          "width":60,
          "x":0,
          "y":0
@@ -99,8 +99,8 @@
                  "type":"playerStart",
                  "visible":true,
                  "width":0,
-                 "x":440,
-                 "y":380
+                 "x":290,
+                 "y":370
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -138,8 +138,8 @@
                  "type":"Spawner",
                  "visible":true,
                  "width":0,
-                 "x":282,
-                 "y":222
+                 "x":280,
+                 "y":230
                 }, 
                 {
                  "height":0,
