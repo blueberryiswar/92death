@@ -46,14 +46,14 @@ export default class UIScene extends Phaser.Scene {
 		});
 
 		this.gameScene.events.on("newGame", () => {
-			this.setDefault();
-			this.updateDisplay();
-
 		});
+
+		this.setDefault();
+		this.updateDisplay();
 	}
 
 	updateDisplay() {
 		this.healthText.setText(`Health: ${this.health}`);
-		this.scoreText.setText(`Score: ${this.coinsCollected}`);
+		this.scoreText.setText(`Score: ${this.bucks}`);
 	}
 }
