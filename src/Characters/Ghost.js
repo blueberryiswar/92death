@@ -7,6 +7,7 @@ export default class Ghost extends Enemy {
         this.scene = scene;
         
         this.setAnimations();
+        this.weight = 1;
         
         this.tolerance = 10;
 
@@ -51,6 +52,24 @@ export default class Ghost extends Enemy {
             repeat: -1
         });
 
+        this.deathAnimation = this.scene.tweens.add({
+            targets: this,
+            props: {
+                scaleX: {
+                    value: 0,
+                    ease: 'Elastic',
+                    duration: 300,
+                    paused: true
+                },
+                scaleY: {
+                    value: 0.5,
+                    ease: 'Elastic',
+                    duration: 300,
+                    paused: true
+                }
+            }
+        });
+
         this.attackAnimation = this.scene.tweens.add({
           targets: this,
           props: {
@@ -68,6 +87,8 @@ export default class Ghost extends Enemy {
               },
           }
         });
+        
+        this.deathAnimation.stop();
     }
 
     skill(target) {
@@ -98,6 +119,16 @@ export default class Ghost extends Enemy {
             default:
             break;
         }
+    }
+
+    dying() {
+        this.deathAnimation.restart();
+        this.scene.time.addEvent({
+            delay: 400,
+            callbackScope: this,
+            callback: this.destroy,
+            loop: false
+        });
     }
 
 }
