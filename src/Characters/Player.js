@@ -270,7 +270,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         }
         this.impactFrom(from, impact);
         this.health -= damage;
-        this.scene.events.emit('healthChange', damage);
+        this.scene.events.emit('healthchange', -1 * damage);
         if (this.health <= 0) {
             this.scene.gameOver();
         }
