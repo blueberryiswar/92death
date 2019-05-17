@@ -132,7 +132,6 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
             width: 80,
             height: 30
         };
-        this.setFlip(false);
         switch(this.direction){
             case "up":
                 position.y += -10;
@@ -142,21 +141,16 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
                 position.y += 25;
                 this.anims.play('scytheDown', true);
                 break;
-            case "right":
-                    position.x += 16;
-                    position.height = 100;
-                    position.width = 50;
-                    this.anims.play('scytheRight', true);
             case "left":
                 position.x -= 12;
-                position.height = 100;
-                position.width = 50;
+                position.height = 80;
+                position.width = 30;
                 this.anims.play('scytheLeft', true);
                 break;
             case "right":
                 position.x += 12;
-                position.height = 100;
-                position.width = 50;
+                position.height = 80;
+                position.width = 30;
                 this.anims.play('scytheRight', true);
             default:
                 break;
@@ -276,7 +270,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         }
         this.impactFrom(from, impact);
         this.health -= damage;
-        this.scene.events.emit('loseHealth', this.health);
+        this.scene.events.emit('healthChange', damage);
         if (this.health <= 0) {
             this.scene.gameOver();
         }
@@ -313,11 +307,13 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
     getMoney(amount) {
         this.money += amount;
+        this.scene.events.emit('buckschange', amount);
     }
 
     spendMoney(amount) {
         if (this.money - amount >= 0) {
             this.money -= amount;
+            this.scene.events.emit('buckschange', -1 * amount);
             return true;
         }
         return false;
