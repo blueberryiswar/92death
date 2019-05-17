@@ -18,7 +18,8 @@ export default class Ghost extends Enemy {
 
         this.body.setSize(12, 12);
         this.body.setOffset(1, 1);
-        this.setBounce(0.2);
+        this.setBounceX(1.5);
+        this.setBounceY(1.6);
     }
 
     setAnimations() {

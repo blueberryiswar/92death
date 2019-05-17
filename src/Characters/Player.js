@@ -166,7 +166,10 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     update(delta, cursors) {
-        if (this.stunned) return;
+        if (this.stunned > 0) {
+            this.stunned -= 1 * delta;
+            return
+        }
         let animationLock = false;
         this.setVelocity(0);
         this.tint = 0xffffff;
@@ -256,19 +259,20 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         console.log('Hit by ' + from);
         if(this.invulnerable > 0) return;
         this.impactFrom(from);
-        this.health -= damage;
+        //this.health -= damage;
         this.scene.events.emit('loseHealth', this.health);
         if (this.health <= 0) {
             this.scene.gameOver();
         }
         this.invulnerable = 200;
+        this.stunned = 120;
     }
 
     impactFrom(obj) {
         let distance = {};
         distance.x = this.x - obj.x;
         distance.y = this.y - obj.y;
-        this.setVelocity(distance.x, distance.y);
+        this.setVelocity(distance.x * 10, distance.y * 10);
     }
 
     enemyCollision() {
