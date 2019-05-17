@@ -21,6 +21,80 @@ export default class UIScene extends Phaser.Scene {
 		// get Reference to the GameScene
 		this.gameScene = this.scene.get("Game");
 
+		/*
+		this.scene.anims.create({
+            key: 'coin_still',
+            frames: [ { key: 'coin', frame: 0 } ],
+            frameRate: 6,
+		});
+		this.scene.anims.create({
+            key: 'coin_spinning',
+            frames: this.scene.anims.generateFrameNumbers('coin', { start: 0, end: 5 }),
+  			frameRate: 6,
+			repeat: -1
+		});
+
+		this.scene.anims.create({
+            key: '1',
+            frames: [ { key: 'numbers', frame: 0 } ],
+            frameRate: 6,
+		});
+
+		this.scene.anims.create({
+            key: '2',
+            frames: [ { key: 'numbers', frame: 1 } ],
+            frameRate: 6,
+		});
+
+		this.scene.anims.create({
+            key: '3',
+            frames: [ { key: 'numbers', frame: 2 } ],
+            frameRate: 6,
+		});
+
+		this.scene.anims.create({
+            key: '4',
+            frames: [ { key: 'numbers', frame: 3 } ],
+            frameRate: 6,
+		});
+
+		this.scene.anims.create({
+            key: '5',
+            frames: [ { key: 'numbers', frame: 4 } ],
+            frameRate: 6,
+		});
+
+		this.scene.anims.create({
+            key: '6',
+            frames: [ { key: 'numbers', frame: 5 } ],
+            frameRate: 6,
+		});
+
+		this.scene.anims.create({
+            key: '7',
+            frames: [ { key: 'numbers', frame: 6 } ],
+            frameRate: 6,
+		});
+
+		this.scene.anims.create({
+            key: '8',
+            frames: [ { key: 'numbers', frame: 7 } ],
+            frameRate: 6,
+		});
+
+		this.scene.anims.create({
+            key: '9',
+            frames: [ { key: 'numbers', frame: 8 } ],
+            frameRate: 6,
+		});
+
+		this.scene.anims.create({
+            key: '0',
+            frames: [ { key: 'numbers', frame: 9 } ],
+            frameRate: 6,
+		});
+		*/
+
 		// create Score text
 		this.scoreText = this.add.text(12, 12, ` `, {
 			fontSize: "32px",
@@ -54,6 +128,6 @@ export default class UIScene extends Phaser.Scene {
 
 	updateDisplay() {
 		this.healthText.setText(`Health: ${this.health}`);
-		this.scoreText.setText(`Score: ${this.bucks}`);
+		this.scoreText.setText(`Bucks: ${this.bucks}`);
 	}
 }
