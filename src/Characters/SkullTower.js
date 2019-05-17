@@ -7,6 +7,7 @@ export default class SkullTower extends Phaser.Physics.Arcade.Sprite {
 
         this.scene = scene;
         this.damage = 1;
+        this.shots = 3;
         this.rangeX = 200;
         this.rangeY = 200;
         this.reloading = false;
@@ -56,11 +57,13 @@ export default class SkullTower extends Phaser.Physics.Arcade.Sprite {
     }
     
     findNextTarget() {
+        let shotsFired = 1;
         let objects = this.scene.physics.overlapRect(this.x - this.rangeX /2, this.y - this.rangeY / 2, this.rangeX, this.rangeY);
         for(let i = 0; i < objects.length; i++) {
             if (objects[i].gameObject.towerTarget) {
-            this.fireAt(objects[i].gameObject);
-            return;
+            this.fireAt(objects[i].gameObject, shotsFired);
+            shotsFired++;
+            if (shotsFired >=this.shots) return;
             }
         }
     }

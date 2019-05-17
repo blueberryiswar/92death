@@ -31,13 +31,15 @@ export default class Ghost extends Phaser.Physics.Arcade.Sprite {
             this.currentTarget.x = this.path.x;
             this.currentTarget.y = this.path.y;
         }
-        console.log(this.path);
+        //console.log(this.path);
 
         // enable physics
         this.scene.physics.world.enable(this);
 
         this.body.setSize(12, 12);
         this.body.setOffset(1, 1);
+        this.setBounce(0.2);
+        //his.body.setCircle(6, 2,2);
 
         //this.body.setSize(10, 10);
         //this.body.setOffset(3, 10);
@@ -73,7 +75,6 @@ export default class Ghost extends Phaser.Physics.Arcade.Sprite {
             frameRate: 4,
             repeat: -1
         });
-
     }
 
     pickNextTarget() {
@@ -94,7 +95,7 @@ export default class Ghost extends Phaser.Physics.Arcade.Sprite {
         const distance = Math.abs(this.x - this.currentTarget.x) + Math.abs(this.y - this.currentTarget.y);
         if (distance > this.tolerance) {
             this.pickNextTarget();
-            console.log('at location');
+            //console.log('at location');
             return true;
         }
         return false;
@@ -102,6 +103,7 @@ export default class Ghost extends Phaser.Physics.Arcade.Sprite {
 
     nearEnough(value1, value2) {
         const distance = value1 - value2;
+        //console.log(Math.floor(value1 / 16))
         if (Math.abs(distance) < 1) {
             return true;
         }
@@ -116,10 +118,10 @@ export default class Ghost extends Phaser.Physics.Arcade.Sprite {
             x:  this.x - this.currentTarget.x,
             y: this.y - this.currentTarget.y
         };
-        console.log(distance);
+        //console.log(distance);
         if (Math.abs(distance.y) + Math.abs(distance.x) > this.tolerance) {
             if (Math.abs(distance.y) > Math.abs(distance.x) || this.nearEnough(this.blocked.y, this.y)) {
-                if (distance.y > 0 || this.body.blocked.up) {
+                if (distance.y > !this.nearEnough(this.blocked.x, this.x) || this.nearEnough(this.blocked.x, this.x) && this.distance.y > 0 || this.nearEnough(this.body.blocked.x, this.x) && this.distance.y < 0) {
                     this.setVelocityY(this.moveSpeed * -1);
                     this.direction = 'up';
                     this.anims.play("ghostUp", true);

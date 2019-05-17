@@ -4,13 +4,11 @@ import Enemies from "../Groups/Enemies";
 import Spawners from "../Groups/Spawners";
 import Target from "../Characters/Target";
 import Towers from "../Groups/Towers";
-import { compileFunction } from "vm";
 
 
 export default class GameScene extends Phaser.Scene {
 	constructor(key) {
 		super(key);
-		
 	}
 
 	init() {

@@ -1,26 +1,29 @@
 import Phaser from 'phaser';
 
 export default class Player extends Phaser.Physics.Arcade.Sprite {
-	constructor (scene, x, y) {
-		super(scene, x, y, 'player', 0);
-		this.scene = scene;
-		this.health = 5;
+    constructor(scene, x, y) {
+        super(scene, x, y, 'player', 0);
+        this.scene = scene;
+        this.health = 5;
         this.invulnerable = false;
-        this.moveSpeed = 90;
+        this.moveSpeed = 80;
         this.direction = 'up';
-        this.diagonal = false;
+        this.lastVelocity = {
+            y: 0,
+            x: 0
+        };
         this.setAnimations();
         this.stunned = true;
         this.bucks = 20;
         //this.tint = 0xff0000;
 
-		// enable physics
+        // enable physics
         this.scene.physics.world.enable(this);
-        
+
         this.body.setSize(16, 20);
         this.body.setOffset(8, 12);
         this.z = 40;
-		// add our player to the scene
+        // add our player to the scene
         this.scene.add.existing(this);
         this.scene.time.addEvent({
             delay: 250,
@@ -28,7 +31,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
             callback: this.appear,
             loop: false
         });
-	}
+    }
 
     setAnimations() {
         this.scene.anims.create({
@@ -82,92 +85,90 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
     }
 
-	update(cursors) {
+    update(cursors) {
         this.buttonpressed = false;
         if (this.stunned) return;
-		// check if the up or down key is pressed
-		if (cursors.up.isDown) {
-			this.setVelocityY(this.moveSpeed * -1);
+        // check if the up or down key is pressed
+        let velocity = {
+            x: 0,
+            y: 0
+        };
+        if (cursors.up.isDown) {
+            velocity.y = -1 * this.moveSpeed;
             this.direction = 'up';
             this.anims.play("up", true);
-            this.diagonal = true;
-            this.buttonpressed = true;
-            this.lastUp = true;
-            this.lastY = true;
-		} else if (cursors.down.isDown) {
-			this.setVelocityY(this.moveSpeed);
+            this.lastVelocity = velocity;
+        } else if (cursors.down.isDown) {
+            velocity.y = this.moveSpeed;
             this.direction = 'down';
             this.anims.play("down", true);
-            this.diagonal = true;
-            this.lastUp = false;
-            this.lastY = true;
-		} else {
-            this.setVelocityY(0);
-            this.diagonal = false;
-		}
+            this.lastVelocity = velocity;
+        }
 
-		// check if the up or down key is pressed
-		if (cursors.left.isDown) {
-			this.setVelocityX(this.moveSpeed * -1);
+        // check if the up or down key is pressed
+        if (cursors.left.isDown) {
+            velocity.x = this.moveSpeed * -1;
             this.direction = 'left';
-            if (!this.diagonal) {
-            this.anims.play("sideway", true);
-            this.buttonpressed = true;
-            this.setFlipX(true);
-            this.lastY = false;
+            if (velocity.y === 0) {
+                this.anims.play("sideway", true);
+                this.setFlipX(true);
             }
-		} else if (cursors.right.isDown) {
-			this.setVelocityX(this.moveSpeed);
+            this.lastVelocity = velocity;
+        } else if (cursors.right.isDown) {
+            velocity.x = this.moveSpeed;
             this.direction = 'right';
-            if (!this.diagonal) {
-            this.anims.play("sideway", true);
-            this.setFlipX(false);}
-            this.buttonpressed = true;
-            this.lastY = false;
-		} else {
-            this.setVelocityX(0);
-            if (!this.diagonal) {
-                this.play('idleside');
-                if(this.lastY) {
-                    if(this.lastUp) {
-                        this.play('idleup');
-                    } else {
-                        this.play('idledown');
-                    }
-                }
+            if (velocity.y === 0) {
+                this.anims.play("sideway", true);
+                this.setFlipX(false);
             }
+            this.lastVelocity = velocity;
+        } else {
+            if (velocity.y === 0) {
+                if (!this.lastVelocity.y === 0) {
+                    if ( this.lastVelocity.y > 0){
+                        this.play('idleup', true);
+                    } else {
+                        this.play('idledown', true);
+                    }
+                } else {
+                    this.play('idleside', true);
+                }
+                
+            } 
         }
-        if (this.buttonpressed) {
-            //this.anims.play('idle', true);
-            this.buttonpressed = false;
+        
+        if (velocity.y !== 0 && velocity.x != 0) {
+            velocity.y *= 0.6;
+            velocity.x *= 0.6;
         }
-        this.z = this.y;
-	}
 
-	loseHealth () {
-		this.health--;
-		this.scene.events.emit('loseHealth', this.health);
-		if (this.health === 0) {
-			this.scene.loadNextLevel(true);
-		}
-		this.invulnerable = true;
-	}
-
-	enemyCollision() {
-		if(!this.invulnerable) {
-			this.loseHealth();
-			this.tint = 0xff0000;
-			this.scene.time.addEvent({
-				delay: 1200,
-				callback: () => {
-					this.invulnerable = false;
-					this.tint = 0xffffff;
-				},
-				callbackScope: this
-			});
-		}
+        this.setVelocity(velocity.x, velocity.y);
     }
-    
+
+    loseHealth() {
+        this.health--;
+        this.scene.events.emit('loseHealth', this.health);
+        if (this.health === 0) {
+            this.scene.loadNextLevel(true);
+        }
+        this.invulnerable = true;
+    }
+
+    enemyCollision() {
+        if (!this.invulnerable) {
+            this.loseHealth();
+            this.tint = 0xff0000;
+            this.scene.time.addEvent({
+                delay: 1200,
+                callback: () => {
+                    this.invulnerable = false;
+                    this.tint = 0xffffff;
+                },
+                callbackScope: this
+            });
+        }
+    }
+
     appear() {
         this.anims.play('appear', true);
         this.scene.time.addEvent({
@@ -187,7 +188,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     spendMoney(amount) {
-        if(this.money - amount >= 0) {
+        if (this.money - amount >= 0) {
             this.money -= amount;
             return true;
         }

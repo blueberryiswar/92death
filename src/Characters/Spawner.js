@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 
 export default class Spawner extends Phaser.Physics.Arcade.Sprite {
 	constructor (scene, x, y, properties) {
-		super(scene, x, y, 'ghost', 0);
+		super(scene, x, y, 'spawner', 0);
 		this.scene = scene;
         this.delay = 1500;
         this.live = 10;
