@@ -6,7 +6,7 @@ export default class Bullets extends Phaser.Physics.Arcade.Group {
         super(world, scene);
         this.scene = scene;
         this.type = type;
-        this.damage = 1;
+        this.damage = 5;
         this.position = position;
         console.log(this.scene);
 
@@ -41,12 +41,13 @@ export default class Bullets extends Phaser.Physics.Arcade.Group {
 
         this.scene.physics.add.overlap(this, this.scene.enemies, (bullet, enemy) => {
             this.enemyCollision(bullet, enemy)
+            
         });
     }
 
     enemyCollision(bullet, enemy) {
         this.deactivateBullet(bullet);
-        enemy.takeDamage(this.damage);
+        enemy.takeDamage(this, this.damage);
     }
 
     getFirstFree() {

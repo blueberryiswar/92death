@@ -5,10 +5,12 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
 		super(scene, x, y, key, 0);
 		this.scene = scene;
         this.defaultLifetime = lifetime;
+        this.lifetime = 5;
         this.speed = 60;
 
         // enable physics
         this.scene.physics.world.enable(this);
+        
 
 		// add our player to the scene
         this.scene.add.existing(this);

@@ -208,6 +208,10 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
             animationLock = false;
         }
 
+        if(this.cooldowns.tower.current > 0) {
+            this.cooldowns.tower.current -= 1 * delta;
+        }
+
         if(this.scene.controls.spaceKey.isDown) {
             this.hitWithScythe();
             return
@@ -274,7 +278,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
         this.setVelocity(velocity.x, velocity.y);
         if(this.placingTower) {
-            this.handleSelector();
+            this.handleSelector(delta);
         }
     }
 
