@@ -4,10 +4,10 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y) {
         super(scene, x, y, 'player', 0);
         this.scene = scene;
-        this.health = 5;
-        this.invulnerable = false;
+        this.health = 6;
         this.moveSpeed = 80;
         this.direction = 'up';
+        this.flash = 10;
         this.cooldowns = {
             scythe: {
                 cooldown: 400,
@@ -21,6 +21,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         };
         this.setAnimations();
         this.stunned = true;
+        this.invulnerable = 0;
         this.bucks = 20;
         //this.tint = 0xff0000;
 
@@ -168,6 +169,19 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         if (this.stunned) return;
         let animationLock = false;
         this.setVelocity(0);
+        this.tint = 0xffffff;
+
+        if (this.invulnerable > 0) {
+            this.invulnerable -= delta * 1;
+            if (this.flash > 0) {
+                this.tint = 0xffff00;
+                this.flash -= delta * 1;
+            } else {
+                this.tint = 0xffffff;
+                this.flash = 10;
+            }
+        }
+
 
         if(this.cooldowns.scythe.current > 0) {
             this.cooldowns.scythe.current -= delta * 1;
@@ -238,13 +252,23 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this.setVelocity(velocity.x, velocity.y);
     }
 
-    loseHealth() {
-        this.health--;
+    takeDamage(damage, from) {
+        console.log('Hit by ' + from);
+        if(this.invulnerable > 0) return;
+        this.impactFrom(from);
+        this.health -= damage;
         this.scene.events.emit('loseHealth', this.health);
-        if (this.health === 0) {
-            this.scene.loadNextLevel(true);
+        if (this.health <= 0) {
+            this.scene.gameOver();
         }
-        this.invulnerable = true;
+        this.invulnerable = 200;
+    }
+
+    impactFrom(obj) {
+        let distance = {};
+        distance.x = this.x - obj.x;
+        distance.y = this.y - obj.y;
+        this.setVelocity(distance.x, distance.y);
     }
 
     enemyCollision() {

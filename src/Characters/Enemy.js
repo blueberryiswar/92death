@@ -6,6 +6,8 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
         this.scene = scene;
         this.health = 5;
         this.monies = 1;
+        this.skillOnCooldown = 0;
+        this.cooldown = 800;
         this.damage = 1;
         this.direction = 'down';
         this.reduceVelocity = 5;
@@ -82,7 +84,7 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
             this.stunned -= 1 * delta;
             this.reduceForce(delta);
             if (this.flash > 0) {
-                this.tint = 0xffff00;
+                this.tint = 0xff5500;
                 this.flash -= 1 * delta;
             } else {
                 this.tint = 0xffffff;
@@ -91,6 +93,9 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
             return;
         } else if(this.health <= 0) {
             return;
+        }
+        if(this.skillOnCooldown > 0) {
+            this.skillOnCooldown -= 1 * delta;
         }
         this.tint = 0xffffff;
         // check if the up or down key is pressed
@@ -163,7 +168,7 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
 
     takeDamage(damage) {
         this.health -= damage;
-        this.stunned = 300;
+        this.stunned = 100;
         if (this.health <= 0) {
             this.scene.enemyDeath();
             this.scene.player.getMoney(this.monies);

@@ -10,7 +10,7 @@ export default class Ghost extends Enemy {
         
         this.tolerance = 10;
 
-        this.moveSpeed = Phaser.Math.Between(15, 25);
+        this.moveSpeed = Phaser.Math.Between(25, 35);
         this.targetPadding = {
             x: Phaser.Math.Between(1, 8),
             y: Phaser.Math.Between(1, 8)
@@ -51,7 +51,9 @@ export default class Ghost extends Enemy {
         });
     }
 
-    
+    skill(target) {
+        target.takeDamage(this.damage, this);
+    }
 
     myLoop(delta) {
         

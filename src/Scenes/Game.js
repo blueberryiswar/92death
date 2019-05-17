@@ -35,13 +35,20 @@ export default class GameScene extends Phaser.Scene {
 		this.getPath();
 		this.createSpawners();
 		this.createTowerGroup();
-		
 
-		this.physics.add.collider([this.player, this.towerGroup], 
+
+		this.physics.add.collider([this.player, this.towerGroup, this.enemies],
 			[this.layers.blocked.first, this.layers.blocked.second]);
-		this.physics.add.collider([this.enemies], 
-				[this.layers.blocked.first, this.layers.blocked.second]);
-		this.physics.add.collider([this.enemies, this.player], this.enemies);
+		this.physics.add.overlap([this.enemies],
+			[this.layers.blocked.first, this.layers.blocked.second], (obj1, obj2) => {
+				obj2.takeDamage(500);
+			});
+		this.physics.add.collider(this.enemies, this.player, (player, enemy) => {
+			enemy.doDamage(player);
+		});
+		this.physics.add.collider(this.enemies, this.enemies);
+
+		console.log(this.layers.blocked);
 
 		this.physics.add.overlap(this.enemies, this.target, (target, enemy) => {
 			let damage = enemy.damage;
@@ -52,7 +59,7 @@ export default class GameScene extends Phaser.Scene {
 				this.gameOver();
 			}
 		});
-		
+
 	}
 
 	gameOver() {
@@ -72,18 +79,18 @@ export default class GameScene extends Phaser.Scene {
 		)
 
 		if (this.controls.gKey.isDown) {
-			if(!this.debug) {
+			if (!this.debug) {
 				console.log(this);
 				this.physics.world.createDebugGraphic();
 				this.debug = true;
 			}
 		}
-		
+
 	}
 
 	createPlayer() {
 		this.map.findObject('Characters', (obj) => {
-			if(obj.type === 'playerStart') {
+			if (obj.type === 'playerStart') {
 				this.player = new Player(this, obj.x, obj.y);
 			}
 		})
@@ -91,7 +98,7 @@ export default class GameScene extends Phaser.Scene {
 
 	createTarget() {
 		this.map.findObject('Characters', (obj) => {
-			if(obj.type === 'target') {
+			if (obj.type === 'target') {
 				this.target = new Target(this, obj.x, obj.y);
 			}
 		});
@@ -99,13 +106,13 @@ export default class GameScene extends Phaser.Scene {
 
 	setUpCamera() {
 		this.cameras.main.startFollow(this.player, true, 0.2, 0.2);
-		this.cameras.main.setDeadzone(20,20);
-		this.cameras.main.setBounds(0,0, this.map.widthInPixels, this.map.heightInPixels);
+		this.cameras.main.setDeadzone(20, 20);
+		this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
 		this.cameras.main.setZoom(3);
 	}
 
 	createMap() {
-		this.map = this.make.tilemap({key: "graveyard"});
+		this.map = this.make.tilemap({ key: "graveyard" });
 		this.tiles = this.map.addTilesetImage('graveyard', 'graveyard', 16, 16, 1, 2);
 		this.layers.background = {};
 		this.layers.blocked = {};
@@ -120,8 +127,8 @@ export default class GameScene extends Phaser.Scene {
 	}
 
 	createSpawners() {
-		for(let i=0; i < this.map.objects.length; i++) {
-			if(this.map.objects[i].name === "Spawners") {
+		for (let i = 0; i < this.map.objects.length; i++) {
+			if (this.map.objects[i].name === "Spawners") {
 				this.spawners = this.map.objects[i];
 				break;
 			}
@@ -135,13 +142,13 @@ export default class GameScene extends Phaser.Scene {
 
 	enemyDeath() {
 		this.toDefeat -= 1;
-		if(this.toDefeat <= 0) {
+		if (this.toDefeat <= 0) {
 			this.playerDone();
 		}
 	}
 
 	playerDone() {
-		if(this.wave < this.waves) {
+		if (this.wave < this.waves) {
 			this.advanceWave();
 		} else {
 			this.gameOver();
@@ -149,11 +156,16 @@ export default class GameScene extends Phaser.Scene {
 	}
 
 	advanceWave() {
-		this.spawnerGroup.children.entries.forEach((spawny) =>{
+		this.spawnerGroup.children.entries.forEach((spawny) => {
 			this.toDefeat += spawny.startingLive;
 			spawny.live = spawny.startingLive + spawny.increment;
 		});
-		this.wave++;
+		if (this.wave < this.waves) {
+			this.wave++;
+		} else {
+			this.gameOver();
+		}
+
 	}
 
 	createTowerGroup() {
@@ -162,8 +174,8 @@ export default class GameScene extends Phaser.Scene {
 
 	getPath() {
 		// find paths layer
-		for(let i=0; i < this.map.objects.length; i++) {
-			if(this.map.objects[i].name === "Paths") {
+		for (let i = 0; i < this.map.objects.length; i++) {
+			if (this.map.objects[i].name === "Paths") {
 				this.paths = this.map.objects[i];
 				break;
 			}
