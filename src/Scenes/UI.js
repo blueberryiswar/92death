@@ -139,7 +139,7 @@ export default class UIScene extends Phaser.Scene {
 		this.purse = [];
 		for(let i = 0; i < 3; i++) {
 			let x = 92 + 24 * i;
-			const number = this.add.sprite(x, 110, 'numbers');
+			const number = this.add.sprite(x, 112, 'numbers');
 			number.setScale(2);
 			this.purse.push(number);
 		}
@@ -202,8 +202,8 @@ export default class UIScene extends Phaser.Scene {
 		this.anims.create({
 			key: 'coinSpin',
 			frames: this.anims.generateFrameNumbers('coin', {start: 0, end: 5}),
-			frameRate: 5,
-			repeat: -1
+			frameRate: 12,
+			repeat: 0
 		});
 	}
 
@@ -226,5 +226,6 @@ export default class UIScene extends Phaser.Scene {
 		this.purse[0].setFrame(Math.floor(this.bucks / 100));
 		this.purse[1].setFrame(Math.floor(this.bucks / 10));
 		this.purse[2].setFrame(this.bucks % 10);
+		this.coin.play('coinSpin', true);
 	}
 }
