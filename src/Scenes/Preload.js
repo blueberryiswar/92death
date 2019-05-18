@@ -36,14 +36,8 @@ export default class PreloadScene extends Phaser.Scene {
             frameWidth: 64,
             frameHeight: 64
         });
-        this.load.spritesheet('coin', 'assets/characters/coin.png', {
-            frameWidth: 16,
-            frameHeight: 16
-        });
-        this.load.spritesheet('numbers', 'assets/characters/numbers.png', {
-            frameWidth: 16,
-            frameHeight: 16
-        });
+        
+        
         this.load.image('spawner', 'assets/characters/pentragram.png');
         this.load.image('aoe', 'assets/gui/aoe.png');
 
