@@ -129,5 +129,6 @@ export default class FireTower extends Phaser.Physics.Arcade.Sprite {
         }*/
         
         //console.log(this.body.velocity.y);
+        this.depth = this.y + this.height / 2;
     }
 }

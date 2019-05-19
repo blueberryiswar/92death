@@ -5,7 +5,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         super(scene, x, y, 'player', 0);
         this.scene = scene;
         this.health = 6;
-        this.moveSpeed = 100;
+        this.moveSpeed = 90;
         this.direction = 'up';
         this.flash = 80;
         this.canPlace = true;
@@ -38,8 +38,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         // enable physics
         this.scene.physics.world.enable(this);
 
-        this.body.setSize(16, 20);
-        this.body.setOffset(8, 12);
+        this.body.setSize(12, 16);
+        this.body.setOffset(10, 16);
         this.z = 40;
         // add our player to the scene
         this.scene.add.existing(this);
@@ -280,6 +280,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         if(this.placingTower) {
             this.handleSelector(delta);
         }
+        this.depth = this.y + this.height / 2;
     }
 
     takeDamage(damage, from) {

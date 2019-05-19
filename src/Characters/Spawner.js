@@ -12,6 +12,7 @@ export default class Spawner extends Phaser.Physics.Arcade.Sprite {
         this.scene.add.existing(this);
         //this.checkPath();
         this.nearestPath = undefined;
+        this.depth = 0;
 
         // also defines maximum distance
         let shortestRoute = 100;

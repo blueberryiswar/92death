@@ -144,6 +144,7 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
         }
 
         this.myLoop(delta);
+        this.depth = this.y + this.height / 2;
     }
     
     myLoop(delta) {
