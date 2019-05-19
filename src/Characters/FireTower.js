@@ -24,6 +24,7 @@ export default class FireTower extends Phaser.Physics.Arcade.Sprite {
         this.reduceVelocity = 2;
 		// add our player to the scene
         this.scene.add.existing(this);
+        this.setImmovable(true);
 
         /*for(let i=0; i<properties.length; i++) {
             let property = properties[i];
