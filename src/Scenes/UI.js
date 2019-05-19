@@ -147,6 +147,8 @@ export default class UIScene extends Phaser.Scene {
 		this.setDefault();
 		this.updateDisplay();
 
+		this.add.text(5, 5, "Pre-Alpha", {font: "12px 8bit", fill:"#fff"});
+
 
 	}
 
