@@ -133,8 +133,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         let position = {
             x: this.x,
             y: this.y,
-            width: 90,
-            height: 50
+            width: 100,
+            height: 55
         };
         this.setFlipX(false);
         switch (this.direction) {
@@ -148,14 +148,14 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
                 break;
             case "left":
                 position.x -= 12;
-                position.height = 90;
-                position.width = 50;
+                position.height = 100;
+                position.width = 55;
                 this.anims.play('scytheLeft', true);
                 break;
             case "right":
                 position.x += 12;
-                position.height = 90;
-                position.width = 50;
+                position.height = 100;
+                position.width = 55;
                 this.anims.play('scytheRight', true);
             default:
                 break;
