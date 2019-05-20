@@ -11,14 +11,14 @@ export default class Ghost extends Enemy {
         
         this.tolerance = 10;
 
-        this.moveSpeed = Phaser.Math.Between(25, 35);
+        this.moveSpeed = Phaser.Math.Between(20, 25);
         this.targetPadding = {
             x: Phaser.Math.Between(1, 8),
             y: Phaser.Math.Between(1, 8)
         };
 
         this.body.setSize(12, 12);
-        this.body.setOffset(1, 1);
+        this.body.setOffset(1, 8);
         this.setBounceX(1.5);
         this.setBounceY(1.6);
     }

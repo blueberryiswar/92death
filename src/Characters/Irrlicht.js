@@ -6,7 +6,7 @@ export default class Irrlicht extends Enemy {
         this.health = 3;
         this.damage = 1;
         this.setAnimations();
-        this.moveSpeed = 15;
+        this.moveSpeed = 12;
         this.exploding = false;
         this.targetPadding = {
             x: Phaser.Math.Between(-15, 15),
@@ -14,7 +14,7 @@ export default class Irrlicht extends Enemy {
         };
 
         this.body.setSize(12,12);
-        this.body.setOffset(4,2);
+        this.body.setOffset(4,8);
 	}
 
     setAnimations() {

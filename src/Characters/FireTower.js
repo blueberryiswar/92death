@@ -89,6 +89,14 @@ export default class FireTower extends Phaser.Physics.Arcade.Sprite {
         this.reloadCurrent = this.reloadTime;
     }
 
+    takeDamage() {
+        console.log("Tower takes damage");
+    }
+
+    doDamage() {
+        console.log("not an enemy");
+    }
+
     update(time, delta) {
         if (this.reloadCurrent > 0) {
             this.reloadCurrent -= 1 * delta;

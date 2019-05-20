@@ -14,7 +14,7 @@ export default class PreloadScene extends Phaser.Scene {
 
         this.load.spritesheet('ghost', 'assets/characters/ghost.png', {
             frameWidth: 14,
-            frameHeight: 14
+            frameHeight: 20
         });
         this.load.spritesheet('player', 'assets/characters/player.png', {
             frameWidth: 32,
@@ -22,7 +22,7 @@ export default class PreloadScene extends Phaser.Scene {
         });
         this.load.spritesheet('irrlicht', 'assets/characters/irrlicht.png', {
             frameWidth: 16,
-            frameHeight: 16
+            frameHeight: 20
         });
         this.load.spritesheet('fireTower', 'assets/towers/fireTower.png', {
             frameHeight: 64,

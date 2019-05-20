@@ -131,6 +131,7 @@ export default class GameScene extends Phaser.Scene {
 		this.layers.blocked.second = this.map.createStaticLayer("Blocked2", this.tiles, 0, 0);
 		this.layers.blocked.second.setCollisionByExclusion([-1]);
 		this.layers.foreground = this.map.createStaticLayer("Foreground", this.tiles, 0, 0);
+		console.log(this.layers.blocked.second);
 	}
 
 	createSpawners() {
