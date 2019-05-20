@@ -45,22 +45,10 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this.z = 40;
         // add our player to the scene
         this.scene.add.existing(this);
-        this.scene.time.addEvent({
-            delay: 250,
-            callbackScope: this,
-            callback: this.appear,
-            loop: false
-        });
+        this.appear();
     }
 
     setAnimations() {
-        this.scene.anims.create({
-            key: 'appears',
-            frames: this.scene.anims.generateFrameNumbers('player', { start: 0, end: 12 }),
-            frameRate: 8,
-            repeat: 0
-        });
-
         this.scene.anims.create({
             key: 'idleside',
             frames: this.scene.anims.generateFrameNumbers('player', { start: 12, end: 12 }),
@@ -128,6 +116,12 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
             key: 'scytheDown',
             frames: this.scene.anims.generateFrameNumbers('scythe', { start: 6, end: 7 }),
             frameRate: 5,
+            repeat: 0
+        });
+        this.scene.anims.create({
+            key: 'appears',
+            frames: this.scene.anims.generateFrameNumbers('player', { start: 0, end: 12 }),
+            frameRate: 8,
             repeat: 0
         });
 
@@ -274,6 +268,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
     handleAnimation(velocity) {
         this.setFlip(false);
+        if (this.stunned > 0 ) return;
         if (velocity.x === 0 && velocity.y === 0) {
             switch (this.direction) {
                 case "up":
@@ -345,6 +340,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
     appear() {
         console.log("play first scene");
+        this.stunned = 30000;
         this.anims.play('appears', true);
         this.scene.time.addEvent({
             delay: 1400,
