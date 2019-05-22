@@ -4,6 +4,7 @@ import Enemies from "../Groups/Enemies";
 import Spawners from "../Groups/Spawners";
 import Target from "../Characters/Target";
 import Towers from "../Groups/Towers";
+import Controls from "../Utils/Controls";
 
 
 export default class GameScene extends Phaser.Scene {
@@ -23,10 +24,9 @@ export default class GameScene extends Phaser.Scene {
 
 	create() {
 		this.createMap();
+		this.controls = new Controls(this);
 		this.cursors = this.input.keyboard.createCursorKeys();
-		this.controls.spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-		this.controls.gKey = this.input.keyboard.addKey('G');
-		this.controls.eKey = this.input.keyboard.addKey('E');
+		
 
 		this.createPlayer();
 		this.createTarget();
@@ -70,7 +70,8 @@ export default class GameScene extends Phaser.Scene {
 	}
 
 	update(time, delta) {
-		this.player.update(delta, this.cursors);
+		this.controls.update();
+		this.player.update(delta);
 		/*if (this.enemyPointer < this.enemies.children.entries.length) {
 			this.enemies.children.entries[this.enemyPointer].update(delta);
 			this.enemyPointer++;
@@ -84,9 +85,8 @@ export default class GameScene extends Phaser.Scene {
 			(child) => { child.update(time, delta); }
 		)
 
-		if (this.controls.gKey.isDown) {
+		if (this.controls.showDebug.isDown) {
 			if (!this.debug) {
-				console.log(this);
 				this.physics.world.createDebugGraphic();
 				this.debug = true;
 			}
@@ -130,7 +130,6 @@ export default class GameScene extends Phaser.Scene {
 		this.layers.blocked.second = this.map.createStaticLayer("Blocked2", this.tiles, 0, 0);
 		this.layers.blocked.second.setCollisionByExclusion([-1]);
 		this.layers.foreground = this.map.createStaticLayer("Foreground", this.tiles, 0, 0);
-		console.log(this.layers.blocked.second);
 	}
 
 	createSpawners() {

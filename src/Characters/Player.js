@@ -195,9 +195,6 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
         this.setVelocity(0);
 
-        if (this.scene.controls.spaceKey.isUp && this.lockSpace) {
-            this.lockSpace = false;
-        }
         if (this.cooldowns.scythe.current > 0) {
             this.cooldowns.scythe.current -= delta * 1;
             return
@@ -207,19 +204,20 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
             this.cooldowns.tower.current -= 1 * delta;
         }
 
-        if (this.scene.controls.spaceKey.isDown && !this.lockSpace) {
+        if (this.scene.controls.buttonPressOnce('baseAttack')) {
             this.hitWithScythe();
-            this.lockSpace = true;
             return
         }
 
 
-        if (this.scene.controls.eKey.isDown && !this.placingTower && this.cooldowns.tower.current <= 0) {
+        if (this.scene.controls.buttonPressOnce('buildTower') 
+            && !this.placingTower 
+            && this.cooldowns.tower.current <= 0) {
             this.placeTower();
         }
 
 
-        const velocity = this.handleMovement(cursors);
+        const velocity = this.handleMovement();
 
         this.handleAnimation(velocity);
 
@@ -229,28 +227,28 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this.depth = this.y + this.height / 2;
     }
 
-    handleMovement(cursors) {
+    handleMovement() {
         // check if the up or down key is pressed
         let velocity = {
             x: 0,
             y: 0
         };
-        if (cursors.up.isDown) {
+        if (this.scene.controls.up()) {
             velocity.y = -1 * this.moveSpeed;
             this.direction = 'up';
             this.lastVelocity = velocity;
-        } else if (cursors.down.isDown) {
+        } else if (this.scene.controls.down()) {
             velocity.y = this.moveSpeed;
             this.direction = 'down';
             this.lastVelocity = velocity;
         }
 
         // check if the up or down key is pressed
-        if (cursors.left.isDown) {
+        if (this.scene.controls.left()) {
             velocity.x = this.moveSpeed * -1;
             this.direction = 'left';
             this.lastVelocity = velocity;
-        } else if (cursors.right.isDown) {
+        } else if (this.scene.controls.right()) {
             velocity.x = this.moveSpeed;
             this.direction = 'right';
             this.lastVelocity = velocity;
@@ -338,11 +336,9 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     appear() {
-        console.log("play first scene");
         this.stunned = 30000;
         this.anims.play('appears', true);
         this.on('animationcomplete', this.unstun, this);
-
     }
 
     unstun() {
@@ -375,7 +371,6 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this.scene.add.existing(this.selector);
         this.scene.physics.add.overlap(this.selector, [this.scene.enemies, this.scene.towerGroup], (target, enemy) => {
             target.alpha = 0.2;
-            console.log(this.selector);
             this.canPlace = false;
             this.cooldowns.tower.collision = this.cooldowns.tower.cooldown;
         });
@@ -383,7 +378,6 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
     placeTower() {
         this.placingTower = true;
-        const coordinates = this.getCoordinates();
         this.selector.active = true;
         this.selector.visible = true;
         this.selector.enableBody();
@@ -424,7 +418,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
             this.canPlace = true;
             this.selector.alpha = 0.6;
         }
-        if (this.scene.controls.eKey.isDown) {
+        if (this.scene.controls.buildTowerState('down')) {
             if (this.canPlace && this.spendMoney(15)) {
                 this.scene.towerGroup.createTower({
                     type: 'FireTower',

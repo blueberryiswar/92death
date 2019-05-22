@@ -54,11 +54,6 @@ export default class Irrlicht extends Enemy {
         this.explpding = true;
         this.anims.play('irrlichtExplode', true);
         this.scene.enemyDeath();
-        this.scene.time.addEvent({
-            delay: 1050,
-            callbackScope: this,
-            callback: this.destroy,
-            loop: false
-        });
+        this.on('animationcomplete', this.destroy, this);
     }
 }
