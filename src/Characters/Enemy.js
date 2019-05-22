@@ -149,6 +149,7 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     
     myLoop(delta) {
         console.log("No loop defined");
+
     }
 
     doDamage(target) {
@@ -185,7 +186,7 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
         distance.x = Math.floor(distance.px * impact / this.weight * distance.dirX);
         distance.y = Math.floor(distance.py * impact / this.weight * distance.dirY);
         this.setVelocity(0);
-        this.setVelocity(distance.x, distance.y);;
+        this.setVelocity(distance.x, distance.y);
     }
 
     takeDamage(source, damage, impact = 200, stun = 200) {

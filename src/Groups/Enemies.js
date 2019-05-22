@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
-import Ghost from '../Characters/Ghost';
-import Irrlicht from '../Characters/Irrlicht';
+import Ghost from '../Characters/Enemies/Ghost';
+import Irrlicht from '../Characters/Enemies/Irrlicht';
 
 export default class Enemies extends Phaser.Physics.Arcade.Group {
     constructor(world, scene, spriteArray) {

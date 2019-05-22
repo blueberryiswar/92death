@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import Bullets from '../Groups/Bullets';
+import Bullets from '../../Groups/Bullets';
 
 export default class SkullTower extends Phaser.Physics.Arcade.Sprite {
 	constructor (scene, x, y) {

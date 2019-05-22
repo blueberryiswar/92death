@@ -54,7 +54,6 @@ export default class GameScene extends Phaser.Scene {
 		this.physics.add.collider(this.enemies, this.enemies);
 
 		this.physics.add.overlap(this.enemies, this.target, (target, enemy) => {
-			let damage = enemy.damage;
 			if (!target.portalOpen) {
 				enemy.doDamage(target);
 			} else {

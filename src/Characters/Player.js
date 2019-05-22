@@ -157,6 +157,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
                 position.height = 100;
                 position.width = 55;
                 this.anims.play('scytheRight', true);
+                break;
             default:
                 break;
         }
@@ -176,10 +177,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         //this.tint = 0xffffff;
 
         if (this.invulnerable > 0) {
-            console.log("Player invulnerable");
             this.invulnerable -= delta * 1;
             if (this.flash > 0) {
-                console.log("flash");
                 this.tint = 0xaaccee;
                 this.flash -= delta * 1;
             } else if (this.flash > -40 && this.flash < 0) {
@@ -342,12 +341,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         console.log("play first scene");
         this.stunned = 30000;
         this.anims.play('appears', true);
-        this.scene.time.addEvent({
-            delay: 1400,
-            callbackScope: this,
-            callback: this.unstun,
-            loop: false
-        });
+        this.on('animationcomplete', this.unstun, this);
+
     }
 
     unstun() {

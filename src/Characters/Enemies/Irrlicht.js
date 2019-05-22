@@ -1,4 +1,5 @@
-import Enemy from './Enemy';
+import Phaser from 'phaser';
+import Enemy from '../Enemy';
 
 export default class Irrlicht extends Enemy {
 	constructor (scene, x, y, path) {

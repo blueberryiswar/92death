@@ -1,5 +1,5 @@
-
-import Enemy from './Enemy';
+import Phaser from 'phaser';
+import Enemy from '../Enemy';
 
 export default class Ghost extends Enemy {
     constructor(scene, x, y, path) {
@@ -80,8 +80,6 @@ export default class Ghost extends Enemy {
 
     skill(target) {
 
-        console.log(this.attackAnimation);
-        console.log(this);
         this.anims.stop();
         this.attackAnimation.restart();
         this.animationLock = 300;
