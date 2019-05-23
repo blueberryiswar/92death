@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import ScyteBaseAttack from './Skills/ScytheBaseAttack';
 
 export default class Player extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y) {
@@ -36,6 +37,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         //this.tint = 0xff0000;
         this.createSelector();
         this.deactivateSelector();
+        this.scytheRadius = new ScyteBaseAttack(this.scene, this.x, this.y, this);
+        this.scytheRadius.deactivate();
 
         // enable physics
         this.scene.physics.world.enable(this);
@@ -161,6 +164,11 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
             default:
                 break;
         }
+
+        this.scytheRadius.activate();
+        this.scytheRadius.x = position.x - 30;
+        this.scytheRadius.y = position.y - 30;
+        /*
         var x = position.x - (position.width / 2);
         var y = position.y - (position.height / 2);
         var within = this.scene.physics.overlapRect(x, y, position.width, position.height);
@@ -171,9 +179,10 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
                     this.cooldowns.scythe.impact, this.cooldowns.scythe.stun);
             }
         });
+        */
     }
 
-    update(delta, cursors) {
+    update(delta) {
         //this.tint = 0xffffff;
 
         if (this.invulnerable > 0) {
@@ -198,6 +207,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         if (this.cooldowns.scythe.current > 0) {
             this.cooldowns.scythe.current -= delta * 1;
             return
+        } else if (this.scytheRadius.active) {
+            this.scytheRadius.deactivate();
         }
 
         if (this.cooldowns.tower.current > 0) {

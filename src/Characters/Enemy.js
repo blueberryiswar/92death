@@ -10,6 +10,7 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
         this.skillOnCooldown = 0;
         this.cooldown = 800;
         this.damage = 1;
+        this.invulnerable = 0;
         this.direction = 'down';
         this.reduceVelocity = 5;
         this.flash = 10;
@@ -81,6 +82,11 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     }
 
     update(delta) {
+
+        if(this.invulnerable > 0) {
+            this.invulnerable -= 1 * delta;
+        }
+
         if(this.stunned > 0) {
             this.stunned -= 1 * delta;
             if (this.flash > 0) {
@@ -190,13 +196,18 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     }
 
     takeDamage(source, damage, impact = 200, stun = 200) {
+        if (this.invulnerable > 0 && this.health <= 0) return
         this.health -= damage;
-        this.stunned = stun;
+        console.log("took 1 damage");
+        this.invulnerable = 300;
         this.impactFrom(source, impact);
         if (this.health <= 0) {
+            this.setVelocity(0);
             this.scene.enemyDeath();
             this.scene.player.getMoney(this.monies);
             this.dying();
+        } else {
+            this.stunned = stun;
         }
     }
 
