@@ -54,7 +54,7 @@ export default class Ghost extends Enemy {
 
         this.scene.anims.create({
             key: 'ghostDeath',
-            frames: this.scene.anims.generateFrameNumbers('ghost', { start: 12, end: 19 }),
+            frames: this.scene.anims.generateFrameNumbers('ghost', { start: 16, end: 19 }),
             frameRate: 4,
             repeat: 0
         });

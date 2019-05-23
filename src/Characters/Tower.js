@@ -9,7 +9,7 @@ export default class Tower extends Phaser.Physics.Arcade.Sprite {
         this.rangeX = 200;
         this.rangeY = 200;
         this.reloading = false;
-        this.reloadTime = 1200;
+        this.reloadTime = 3000;
         this.reloadCurrent = 2000;
         this.health = 50;
 

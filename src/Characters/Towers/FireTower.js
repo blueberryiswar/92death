@@ -1,5 +1,6 @@
 import Bullets from '../../Groups/Bullets';
 import Tower from '../Tower';
+import TargetArea from '../Skills/targetArea';
 
 export default class FireTower extends Tower {
 	constructor (scene, x, y) {
@@ -7,6 +8,8 @@ export default class FireTower extends Tower {
 
         this.bullets = new Bullets(this.scene.physics.world, this.scene, 'fireBomb', {x: this.x, y: this.y - 26}, 8);
         this.setAnimations();
+        this.targetArea = new TargetArea(this.scene, this.x, this.y + 40, 100, this);
+        this.targetArea.deactivate();
 
 
         this.setSize(36, 24);
