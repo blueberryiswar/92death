@@ -21,6 +21,7 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
 
         if(this.lifetime > 0 ) {
             this.lifetime -= 1 * delta;
+            this.depth = 1000;
         } else {
             this.deactivate();
         }

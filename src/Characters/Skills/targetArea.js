@@ -14,7 +14,7 @@ export default class TargetArea extends Phaser.GameObjects.Zone {
         this.y = this.y - radius;
         // add our player to the scene
         this.scene.add.existing(this);
-        this.collider = this.scene.physics.add.overlap(this, this.scene.enemies, this.action, this);
+        this.collider = this.scene.physics.add.overlap(this, this.scene.enemies, this.action, null, this);
     }
 
     action(target, enemy) {
@@ -24,7 +24,7 @@ export default class TargetArea extends Phaser.GameObjects.Zone {
     activate() {
         this.body.setEnable(true);
         this.setActive(true);
-        this.collider = this.scene.physics.add.collider(this, this.scene.enemies, this.action, null, this);
+        this.collider = this.scene.physics.add.overlap(this, this.scene.enemies, this.action, null, this);
 
         
     }

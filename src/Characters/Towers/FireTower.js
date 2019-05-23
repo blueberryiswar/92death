@@ -29,7 +29,7 @@ export default class FireTower extends Tower {
         
         this.scene.anims.create({
             key: 'fireTowerShoot',
-            frames: this.scene.anims.generateFrameNumbers('fireTower', { start: 12, end: 17 }),
+            frames: this.scene.anims.generateFrameNumbers('fireTower', { start: 12, end: 16 }),
             frameRate: 6,
             repeat: 0
         });
@@ -37,13 +37,14 @@ export default class FireTower extends Tower {
     }
     
     findNextTarget() {
-        let objects = this.scene.physics.overlapRect(this.x - this.rangeX /2, this.y - this.rangeY / 2, this.rangeX, this.rangeY);
+        /*let objects = this.scene.physics.overlapRect(this.x - this.rangeX /2, this.y - this.rangeY / 2, this.rangeX, this.rangeY);
         for(let i = 0; i < objects.length; i++) {
             if (objects[i].gameObject.towerTarget) {
             this.fireAt(objects[i].gameObject);
             return;
             }
-        }
+        } */
+        this.targetArea.activate();
     }
     //&& objects[i].gameObject.hasOwnProperty('takeDamage')
 
@@ -52,12 +53,14 @@ export default class FireTower extends Tower {
         this.anims.play('fireTowerShoot', true);
         this.on('animationcomplete', this.fireBullet, this);
         this.myTarget = target;
+        this.targetArea.deactivate();
         //target.takeDamage(this.damage);
     }
 
     fireBullet() {
         if(this.reloadCurrent > 0) return;
         this.bullets.fireBullet({x: this.x, y: this.y - 26}, this.myTarget);
+        this.setFrame(17);
         this.reloadTower();
         //this.scene.physics.pause();
     }
