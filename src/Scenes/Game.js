@@ -23,6 +23,7 @@ export default class GameScene extends Phaser.Scene {
 	}
 
 	create() {
+		this.events.emit('newGame');
 		this.createMap();
 		this.controls = new Controls(this);
 		this.cursors = this.input.keyboard.createCursorKeys();
@@ -186,6 +187,6 @@ export default class GameScene extends Phaser.Scene {
 				break;
 			}
 		}
-		console.log(this.paths);
+		
 	}
 }

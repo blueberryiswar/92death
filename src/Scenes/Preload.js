@@ -47,7 +47,7 @@ export default class PreloadScene extends Phaser.Scene {
 	create() {
         this.scene.start('Game');
 
-        this.game.add.text(0,0, "hack", {font:"1px 8bit", fill: "#fff"});
+        this.add.text(0,0, "hack", {font:"1px 8bit", fill: "#fff"});
     }
     
 }
