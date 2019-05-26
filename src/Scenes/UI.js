@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import HitPoint from "../Characters/HitPoint";
+import HitPoint from "../Prefabs/HitPoint";
 
 export default class UIScene extends Phaser.Scene {
 	constructor() {

@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import FireBomb from '../Characters/FireBomb';
+import FireBomb from '../Prefabs/FireBomb';
 
 export default class Bullets extends Phaser.Physics.Arcade.Group {
     constructor(world, scene, type, position, amount) {

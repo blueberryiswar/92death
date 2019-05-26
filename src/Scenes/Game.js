@@ -1,8 +1,8 @@
 import Phaser from "phaser";
-import Player from "../Characters/Player";
+import Player from "../Prefabs/Player";
 import Enemies from "../Groups/Enemies";
 import Spawners from "../Groups/Spawners";
-import Target from "../Characters/Target";
+import Target from "../Prefabs/Target";
 import Towers from "../Groups/Towers";
 import Controls from "../Utils/Controls";
 

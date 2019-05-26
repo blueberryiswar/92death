@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import FireTower from '../Characters/Towers/FireTower';
+import FireTower from '../Prefabs/Towers/FireTower';
 
 export default class Towers extends Phaser.Physics.Arcade.StaticGroup {
     constructor(world, scene) {

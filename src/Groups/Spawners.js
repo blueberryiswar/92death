@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import Spawner from '../Characters/Spawner';
+import Spawner from '../Prefabs/Spawner';
 
 export default class Spawners extends Phaser.Physics.Arcade.StaticGroup {
     constructor(world, scene, spriteArray) {
