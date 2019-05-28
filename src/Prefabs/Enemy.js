@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import Point from '../Utils/Point';
 
 export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y, key, path) {
@@ -9,6 +10,7 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
         this.impact = 200; // Impact of skill towards Player
         this.skillOnCooldown = 0;
         this.cooldown = 800;
+        this.gotPushed = false;
         this.damage = 1;
         this.invulnerable = 0;
         this.direction = 'down';
@@ -20,7 +22,7 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
         this.myTarget = this.scene.target;
         this.tolerance = 10;
         this.weight = 1;
-        this.currentTarget = { x: this.myTarget.x, y: this.myTarget.y };
+        this.currentTarget = new Point(this.myTarget.x, this.myTarget.y);
         this.blocked = {
             x: 0,
             y: 0
@@ -48,17 +50,47 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     }
 
     pickNextTarget() {
+        this.pathcounter++;
         if (this.path) {
             if (this.path.polyline.length > this.pathcounter) {
                 const path = this.path.polyline[this.pathcounter];
-                this.currentTarget.x = this.path.x + path.x;
-                this.currentTarget.y = this.path.y + path.y;
-                this.pathcounter++;
-                return;
+                this.currentTarget = new Point(this.path.x + path.x, this.path.y + path.y);
+                return
             }
         }
-        this.currentTarget.x = this.myTarget.x;
-        this.currentTarget.y = this.myTarget.y;
+        this.currentTarget = new Point(this.myTarget.x, this.myTarget.y)
+    }
+
+    nearestTarget() {
+        let o = {
+            distance: this.getDistance(this.myTarget),
+            nearestTarget: this.currentTarget,
+            counter: this.pathcounter
+        }
+
+        for(let i = 0; i < this.path.polyline.length; i++) {
+            if(this.pathcounter !== i) {
+                const point = new Point(0, 0, this.path, i);
+                const currentDistance = point.getDistanceTo(this);
+                if (o.distance > currentDistance) {
+                    o.distance = currentDistance;
+                    o.nearestTarget = point;
+                    o.counter = i;
+                }
+            }
+        }
+
+        const targetPoint = new Point(this.myTarget.x, this.myTarget.y);
+        if (targetPoint.getDistanceTo(this) < o.distance) {
+            o.nearestTarget = targetPoint;
+            o.counter = this.path.polyline.length;
+        }
+
+        return o
+    }
+
+    getDistance(point) {
+        return Math.abs(point.x - this.x) + Math.abs(point.y - this.y)
     }
 
     atLocation() {
@@ -81,6 +113,11 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
 
     }
 
+    setNewTarget(target) {
+        this.currentTarget = target.nearestTarget;
+        this.targetcounter = target.counter;
+    }
+
     update(delta) {
 
         if(this.invulnerable > 0) {
@@ -97,9 +134,15 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
                 this.flash = 20;
             }
             return;
-        } else if(this.health <= 0) {
+        } else if( this.health <= 0) {
             return;
         }
+
+        if (this.gotPushed) {
+            this.setNewTarget(this.nearestTarget());
+            this.gotPushed = false;
+        }
+
         if(this.skillOnCooldown > 0) {
             this.skillOnCooldown -= 1 * delta;
         }
@@ -173,6 +216,7 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     }
     
     impactFrom(obj, impact) {
+        this.gotPushed = true;
         let distance = {};
         distance.x = this.x - obj.x;
         distance.y = this.y - obj.y;

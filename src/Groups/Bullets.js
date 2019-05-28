@@ -11,10 +11,9 @@ export default class Bullets extends Phaser.Physics.Arcade.Group {
         console.log(this.scene);
 
 
+
         switch(type) {
             case 'fireBomb':
-                key = 'fireBomb';
-           
                 this.damage = 5;
                 break;
             default:

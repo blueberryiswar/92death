@@ -1,6 +1,6 @@
 {
   "name": "92death",
-  "version": "0.1",
+  "version": "0.1.0",
   "description": "A Tower Defense Game made with Phaser",
   "main": "src/index.js",
   "scripts": {
@@ -12,7 +12,7 @@
     "url": "git+https://github.com/blueberryiswar/92death.git"
   },
   "author": "Benjamin Baer, Simon Ettmueller, Florian Baer",
-  "license": "GPL",
+  "license": "GPL-3.0-or-later",
   "licenseUrl": "https://www.gnu.org/licenses/",
   "bugs": {
     "url": "https://github.com/blueberryiswar/92death/issues"

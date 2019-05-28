@@ -92,7 +92,7 @@ export default class UIScene extends Phaser.Scene {
 		let count = this.health;
 		let i = 0;
 		while (count > 0) {
-			let hitpoint = this.getHitpoint(count, i);
+			const hitpoint = this.getHitpoint(count, i);
 			this.hitpoints.push(hitpoint);
 			count -= 2;
 			i++;
